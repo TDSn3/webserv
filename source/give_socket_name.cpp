@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 15:03:33 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/02 14:26:02 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/02 16:06:45 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@
 /* ************************************************************************** */
 int	give_socket_name(struct sockaddr_in *adress, const int PORT, int server_fd)
 {
-	memset( (char *)adress, 0, sizeof(*adress) );
+	memset( (char *) adress, 0, sizeof(*adress) );
 	adress->sin_family = AF_INET;
-	adress->sin_addr.s_addr = htonl(INADDR_ANY); 
+	adress->sin_addr.s_addr = INADDR_ANY; 
 	adress->sin_port = htons(PORT);
 
 	if (bind(server_fd, (struct sockaddr *) adress, sizeof(*adress) ) < 0) 
