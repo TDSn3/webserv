@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 14:22:45 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/02 16:12:20 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/02 16:24:05 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 int	client_accept(int server_fd)
 {
-	int					connexion_fd;
+	int					communication_fd;	// socket de communication
 	struct sockaddr_in	client_adress;
 	socklen_t			client_adress_len;
 
 	memset( (char *) &client_adress, 0, sizeof(client_adress) );
 	client_adress_len = sizeof(client_adress);
-	connexion_fd = accept(server_fd, (struct sockaddr *) &client_adress, &client_adress_len);
+	communication_fd = accept(server_fd, (struct sockaddr *) &client_adress, &client_adress_len);
 
-	if (connexion_fd < 0)
+	if (communication_fd < 0)
 	{
 		perror("accept");
 		return (1);
