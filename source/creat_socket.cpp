@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 14:48:34 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/01 15:10:02 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/02 14:26:05 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,6 @@ int	creat_socket(void)
 		perror("cannot create socket"); 
 		return (-1);
 	}
+
 	return (server_fd);
 }

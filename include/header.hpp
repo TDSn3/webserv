@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:58:36 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/01 15:12:20 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/02 14:23:56 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,6 @@
 
 int	creat_socket(void);
 int	give_socket_name(struct sockaddr_in *adress, const int PORT, int server_fd);
+int	listen_and_wait_accept(int server_fd);
 
 #endif

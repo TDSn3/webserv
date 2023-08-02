@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 15:03:33 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/01 15:10:30 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/02 14:26:02 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 /* ************************************************************************** */
 /*                                                                            */
-/*   htonl()	: convertit un long int (par exemple une adresse)			  */
+/*   htonl()	: convertit un entier  non  signé (par exemple une adresse)	  */
 /*				  en une représentation réseau.								  */
-/*   htons()	: convertit un entier court (par exemple port)				  */
+/*   htons()	: convertit un entier court non  signé (par exemple port)	  */
 /*				  en une représentation réseau.								  */
 /*                                                                            */
 /* ************************************************************************** */
@@ -32,5 +32,6 @@ int	give_socket_name(struct sockaddr_in *adress, const int PORT, int server_fd)
 		perror("bind failed"); 
 		return (1);
 	}
+
 	return (0);
 }
