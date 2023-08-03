@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:58:36 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/02 16:12:31 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/03 17:05:21 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 # include <sys/time.h>
 # include <sys/types.h>
 # include <poll.h>
-// # include <sys/epoll.h>
 # include <sys/event.h>
 # include <sys/socket.h>
 # include <netdb.h>
@@ -36,8 +35,8 @@
 
 # include "colors.hpp"
 
-int	creat_socket(void);
-int	give_socket_name(struct sockaddr_in *adress, const int PORT, int server_fd);
+# include "class/Server.hpp"
+
 int	client_accept(int server_fd);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 14:48:34 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/02 14:26:05 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/03 16:58:16 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 /*   SOCK_STREAM	: flux d'octets full-duplex.							  */
 /*                                                                            */
 /* ************************************************************************** */
-int	creat_socket(void)
+int	Server::creat_socket(void)
 {
 	int	server_fd;
 

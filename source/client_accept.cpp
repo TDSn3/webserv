@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 14:22:45 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/03 09:48:55 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/03 12:05:35 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	client_accept(int server_fd)
 		return (1);		
 	}
 
-	std::cout << "\n+++++++ Waiting for new connection ++++++++\n" << std::endl;
+	std::cout << COLOR_GREEN << "\n+++++++ Waiting for new connection ++++++++\n" << COLOR_RESET << std::endl;
 
 	while (1)	// temporaire. Pour fonctionnner avec un fd non bloquant
 	{
@@ -43,9 +43,9 @@ int	client_accept(int server_fd)
 	}
 
 	char		buff[INET6_ADDRSTRLEN] = {0};
-	std::string	client_address( inet_ntop(client_adress.sin_family, (void*)&(client_adress.sin_addr), buff, INET6_ADDRSTRLEN) );
+	std::string	client_ip( inet_ntop(client_adress.sin_family, (void*)&(client_adress.sin_addr), buff, INET6_ADDRSTRLEN) );
 
-	std::cout << "Connexion de " << client_address << std::endl;
+	std::cout << "Connexion de " << client_ip << ":" << client_adress.sin_port << std::endl;
 
 
 
@@ -53,7 +53,7 @@ int	client_accept(int server_fd)
 	char	buffer[30000] = {0};
 
 	recv(communication_fd, buffer, sizeof(buffer), 0);
-	std::cout << "=> " << buffer << std::endl;
+	std::cout << buffer << std::endl;
 	write(communication_fd , hello , strlen(hello));
 
 	close(communication_fd);
