@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 16:31:05 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/02 16:34:39 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/03 08:57:26 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	main(int argc, char **argv)
     
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(PORT);
-    
+
     // Convert IPv4 and IPv6 addresses from text to binary form
     if(inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr)<=0)
     {
@@ -39,7 +39,7 @@ int	main(int argc, char **argv)
         return -1;
     }
     
-    if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
+    if (connect(sock, (struct sockaddr *) &serv_addr, sizeof(serv_addr) ) < 0)
     {
         printf("\nConnection Failed \n");
         return -1;
