@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 08:58:53 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/03 17:14:27 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/04 15:27:07 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,22 +17,24 @@
 /*   CONSTRUCTEUR															  */
 /*                                                                            */
 /* ************************************************************************** */
-Server::Server(void) : port(0)
-{
-}
-
 Server::Server(const int port) : port(port)
 {
-	_fd = creat_socket();						// Crée un socket pour ce connecter au serveur
-	if (_fd < 0) 
+	_connexion_fd = creat_socket();							// Crée un socket pour ce connecter au serveur
+	if (_connexion_fd < 0) 
 		throw (std::exception() );
 
-	if (give_socket_name(&_adress, port, _fd))	// Affecte un "nom" au socket crée
+	if (give_socket_name(&_adress, port, _connexion_fd))	// Affecte un "nom" au socket crée
 		throw (std::exception() );
 
-	if (listen(_fd, 3) < 0)						// Prépare le socket pour la connexion
+	if (listen(_connexion_fd, 3) < 0)						// Prépare le socket pour la connexion
 	{
 		perror("listen");
+		throw (std::exception() );
+	}
+
+	if (fcntl(_connexion_fd, F_SETFL, O_NONBLOCK) )			// unique utilisation autorisé par le sujet
+	{
+		perror("fcntl");
 		throw (std::exception() );
 	}
 }
@@ -51,6 +53,9 @@ Server::Server(const Server &src) : port(src.port)
 /* ************************************************************************** */
 Server::~Server(void)
 {
+	for (std::vector<Client> :: iterator it = clients.begin(); it != clients.end(); it++)
+		close(it->communication_fd);
+	close(_connexion_fd);
 }
 
 /* ************************************************************************** */
@@ -71,9 +76,9 @@ Server::~Server(void)
 
 /*   MÉTHODE PUBLIC   ******************************************************* */
 
-int	Server::give_fd(void)
+int	Server::give_connexion_fd(void)
 {
-	return (_fd);
+	return (_connexion_fd);
 }
 
 /*   MÉTHODE PRIVATE   ****************************************************** */
