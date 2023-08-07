@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 08:57:10 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/04 14:39:18 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/07 10:34:16 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,10 @@ class Server
 	private:
 
 		int					creat_socket(void);
-		int					give_socket_name(struct sockaddr_in *adress, const int PORT, int server_fd);
+		int					give_socket_name(struct sockaddr_in *address, const int PORT, int server_fd);
 
 		int					_connexion_fd;
-		struct sockaddr_in	_adress;
+		struct sockaddr_in	_address;
 
 };
 

@@ -6,11 +6,13 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 14:22:45 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/07 09:25:09 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/07 11:16:37 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <header.hpp>
+
+int test = 0;
 
 int	client_accept(Server &server)
 {
@@ -20,7 +22,7 @@ int	client_accept(Server &server)
 	{
 		Client	new_client;
 		
-		new_client.communication_fd = accept(server.give_connexion_fd(), (struct sockaddr *) &new_client.adress, &new_client.adress_len);
+		new_client.communication_fd = accept(server.give_connexion_fd(), (struct sockaddr *) &new_client.address, &new_client.address_len);
 		if (new_client.communication_fd != -1)	// si une nouvelle connexion est arrivée
 		{
 			try
@@ -33,18 +35,11 @@ int	client_accept(Server &server)
 				continue ;
 			}
 
-			char		buff[INET6_ADDRSTRLEN] = {0};
-			std::string	client_ip( inet_ntop(new_client.adress.sin_family, (void*)&(new_client.adress.sin_addr), buff, INET6_ADDRSTRLEN) );
+			new_client.ipv4 = new_client.ip_to_string();
+			new_client.port = new_client.address.sin_port;
 
-			std::cout << "Connexion de " << COLOR_BOLD << client_ip << COLOR_DIM << ":" << new_client.adress.sin_port << COLOR_RESET << std::endl;
+			std::cout << "Connexion de " << COLOR_BOLD << new_client.ipv4 << COLOR_DIM << ":" << new_client.port << COLOR_RESET << std::endl;
 			server.clients.push_back(new_client);
-
-			char	*hello = "HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 12\n\nHello world!";
-			char	buffer[3000] = {0};
-		
-			recv(new_client.communication_fd, buffer, sizeof(buffer), 0);
-			std::cout << buffer << std::endl;
-			write(new_client.communication_fd , hello , strlen(hello));
 		}
 		
 		std::vector<Client> :: iterator it = server.clients.begin();
@@ -53,21 +48,39 @@ int	client_accept(Server &server)
 		{
 			char	buffer[3000] = {0};
 			ssize_t	ret;
-			// bool	disconnect;
+			bool	disconnect;
 
-			// disconnect = false;
+			disconnect = false;
 			ret = recv(it->communication_fd, buffer, sizeof(buffer), 0);
-			if (ret == -1)
+			if (ret > 0)
+				std::cout << "[" << it->ipv4 << ":" << it->port << "]" << buffer << std::endl;
+			else if (ret == 0)	// la connexion a été fermée par le client
+				disconnect = true;
+			else if (ret == -1 && errno != EWOULDBLOCK)
+				disconnect = true;
+			//else
+			//{
+			//	std::cout << (errno == EWOULDBLOCK) << std::endl;
+			//}
+
+			if (!test)
 			{
-				
+				char	*hello = "HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 12\n\nHello world!";
+				char	buffer2[3000] = {0};
+			
+				write(new_client.communication_fd , hello , strlen(hello));
+				//recv(new_client.communication_fd, buffer2, sizeof(buffer2), 0);
+				//std::cout << buffer2 << std::endl;
+				test++;
 			}
-			// if (ret == 0)
-			// 	disconnect = true;
-			// else if (ret == -1 && errno == EWOULDBLOCK)
-			// {
-			// 	EWOULDBLOCK;
-			// }
-			it++;
+
+			if (disconnect)
+			{
+				std::cout << "Déconnexion de [" << it->ipv4 << ":" << it->port << "]" << std::endl;
+				it = server.clients.erase(it);
+			}
+			else
+				it++;
 		}
 	}
 

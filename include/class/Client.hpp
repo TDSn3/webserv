@@ -6,12 +6,15 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 08:57:10 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/04 15:32:18 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/07 10:44:19 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CLIENT_HPP
 # define CLIENT_HPP
+
+# include <iostream>
+# include <sstream>
 
 class Server;
 
@@ -21,8 +24,8 @@ class Client
 
 		Client(void)
 		{
-			memset( (char *) &adress, 0, sizeof(adress) );
-			adress_len = sizeof(adress);
+			memset( (char *) &address, 0, sizeof(address) );
+			address_len = sizeof(address);
 		}
 
 		void	set_non_blocking_fd(void)
@@ -34,9 +37,27 @@ class Client
 			}			
 		}
 
+		std::string	ip_to_string(void)
+		{
+			std::stringstream	ss;
+			ss << static_cast<int>(address.sin_addr.s_addr & 0xFF) << '.'
+				<< static_cast<int>( (address.sin_addr.s_addr >> 8) & 0xFF) << '.'
+				<< static_cast<int>( (address.sin_addr.s_addr >> 16) & 0xFF) << '.'
+				<< static_cast<int>( (address.sin_addr.s_addr >> 24) & 0xFF);
+
+			//char		buff[INET6_ADDRSTRLEN] = {0};
+			//std::string	str( inet_ntop(address.sin_family, (void*) &(address.sin_addr), buff, INET6_ADDRSTRLEN) );
+
+			//return (str);
+
+			return (ss.str() );
+		}
+
 		int					communication_fd;
-		struct sockaddr_in	adress;
-		socklen_t			adress_len;
+		struct sockaddr_in	address;
+		socklen_t			address_len;
+		std::string			ipv4;
+		in_port_t			port;
 
 	protected:
 
