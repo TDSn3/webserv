@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 14:22:45 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/04 15:57:31 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/05 12:11:59 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	client_accept(Server &server)
 		Client	new_client;
 		
 		new_client.communication_fd = accept(server.give_connexion_fd(), (struct sockaddr *) &new_client.adress, &new_client.adress_len);
-		if (new_client.communication_fd != -1)
+		if (new_client.communication_fd != -1)	// si une nouvelle connexion est arrivée
 		{
 			try
 			{
@@ -46,20 +46,28 @@ int	client_accept(Server &server)
 			std::cout << buffer << std::endl;
 			write(new_client.communication_fd , hello , strlen(hello));
 		}
-		for (std::vector<Client> :: iterator it = server.clients.begin(); it != server.clients.end(); it++)
+		
+		std::vector<Client> :: iterator it = server.clients.begin();
+		
+		while (it != server.clients.end() )
 		{
-			// char	buffer[3000] = {0};
-			// int		ret;
+			char	buffer[3000] = {0};
+			int		ret;
 			// bool	disconnect;
 
 			// disconnect = false;
-			// ret = recv(it->communication_fd, buffer, sizeof(buffer), 0);
+			ret = recv(it->communication_fd, buffer, sizeof(buffer), 0);
+			if (ret == -1)
+			{
+				
+			}
 			// if (ret == 0)
 			// 	disconnect = true;
 			// else if (ret == -1 && errno == EWOULDBLOCK)
 			// {
 			// 	EWOULDBLOCK;
 			// }
+			it++;
 		}
 	}
 
