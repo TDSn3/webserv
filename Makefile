@@ -6,7 +6,7 @@
 #    By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/30 09:01:22 by tda-silv          #+#    #+#              #
-#    Updated: 2023/08/03 09:49:15 by tda-silv         ###   ########.fr        #
+#    Updated: 2023/08/07 09:22:50 by tda-silv         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,8 +32,8 @@ I_HEADER	= -I $(INC_DIR)
 
 HEADER		= $(shell find include/ -type f)
 
-SEARCH_FILE	= $(shell find $(SRC_DIR) -name "*.cpp")
-NAME_FILE	= $(SEARCH_FILE:$(SRC_DIR)/%.cpp=%)
+SEARCH_FILE	= $(shell find $(SRC_DIR) -type f -name "*.cpp")
+NAME_FILE	= $(shell echo $(SEARCH_FILE) | sed 's|source/||g' | sed 's|\.cpp||g')
 
 SRC			= $(addsuffix .cpp, $(addprefix $(SRC_DIR), $(NAME_FILE)))
 OBJ			= $(addsuffix .o, $(addprefix $(OBJ_DIR), $(NAME_FILE)))

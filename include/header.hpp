@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:58:36 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/04 15:37:25 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/07 08:57:46 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,14 @@
 
 # include <unistd.h>
 # include <string.h>
+# include <stdio.h>
 # include <errno.h>
 # include <arpa/inet.h>
 # include <sys/select.h>
 # include <sys/time.h>
 # include <sys/types.h>
 # include <poll.h>
-# include <sys/event.h>
+//# include <sys/event.h>
 # include <sys/socket.h>
 # include <netdb.h>
 # include <fcntl.h>
@@ -32,6 +33,7 @@
 # include <netinet/in.h>
 
 # include <iostream>
+# include <vector>
 
 # include "colors.hpp"
 

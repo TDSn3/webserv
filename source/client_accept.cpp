@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 14:22:45 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/05 12:11:59 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/07 09:25:09 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	client_accept(Server &server)
 		while (it != server.clients.end() )
 		{
 			char	buffer[3000] = {0};
-			int		ret;
+			ssize_t	ret;
 			// bool	disconnect;
 
 			// disconnect = false;
