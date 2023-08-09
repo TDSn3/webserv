@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 14:22:45 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/09 13:19:43 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/09 13:34:33 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	client_accept(Server &server)
 	{
 		int		ret;
 
-		ret = poll(server.poll_struct.data(), server.poll_struct.size(), -1);
+		ret = poll(server.poll_struct.data(), server.poll_struct.size(), 0);
 		if (ret == -1)
 		{
 			perror("poll");
