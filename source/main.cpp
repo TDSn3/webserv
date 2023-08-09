@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:58:01 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/04 15:15:48 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/09 11:27:20 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	main(int argc, char **argv)
 	{
 		Server	server(8080);
 
-		std::cout << "Le serveur demarre sur le port " << server.port << std::endl;
+		std::cout << "\nLe serveur démarre sur le port " << COLOR_BOLD_BLUE << server.port << COLOR_RESET << std::endl;
 
 		if (client_accept(server) )
 			return (1);

@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 08:57:10 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/09 09:02:55 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/09 13:11:43 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,15 @@ class Client
 			poll_struct = NULL;
 		}
 
-		void	set_non_blocking_fd(void)
+		int	set_non_blocking_fd(void)
 		{
 			if (fcntl(communication_fd, F_SETFL, O_NONBLOCK) )	// unique utilisation autorisé par le sujet
 			{
+				close(communication_fd);
 				perror("fcntl");
-				throw (std::exception() );
-			}			
+				return (1);
+			}
+			return (0);
 		}
 
 		std::string	ip_to_string(void)
@@ -54,12 +56,13 @@ class Client
 			return (ss.str() );
 		}
 
-		int					communication_fd;
-		struct sockaddr_in	address;
-		socklen_t			address_len;
-		std::string			ipv4;
-		in_port_t			port;
-		pollfd				*poll_struct;
+		int								communication_fd;
+		struct sockaddr_in				address;
+		socklen_t						address_len;
+		std::string						ipv4;
+		in_port_t						port;
+		pollfd							*poll_struct;
+		std::vector<pollfd> :: iterator	it;
 
 	protected:
 

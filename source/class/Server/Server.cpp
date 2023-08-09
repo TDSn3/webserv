@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 08:58:53 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/09 09:12:28 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/09 13:18:40 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,18 +78,26 @@ Server::~Server(void)
 
 /*   MÉTHODE PUBLIC   ******************************************************* */
 
-int	Server::give_connexion_fd(void)
+int		Server::give_connexion_fd(void)
 {
 	return (_connexion_fd);
 }
 
-void	Server::add_fd_poll_struct(int fd, short events)
+bool	Server::new_connexion(void)
+{
+	return (poll_struct[0].revents & POLLIN);
+}
+
+pollfd	*Server::add_fd_poll_struct(int fd, short events)
 {
 	pollfd	new_poll_struct;
 
 	new_poll_struct.fd = fd; 
 	new_poll_struct.events = events;
-	_poll_struct.push_back(new_poll_struct);
+	new_poll_struct.revents = 0;
+	poll_struct.push_back(new_poll_struct);
+
+	return (&poll_struct.back() );
 }
 
 /*   MÉTHODE PRIVATE   ****************************************************** */

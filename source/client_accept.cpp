@@ -6,13 +6,13 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 14:22:45 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/07 11:16:37 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/09 13:19:43 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <header.hpp>
 
-int test = 0;
+static void	clients_poll_struct_check(Server &server);
 
 int	client_accept(Server &server)
 {
@@ -20,32 +20,51 @@ int	client_accept(Server &server)
 
 	while (1)
 	{
-		Client	new_client;
-		
-		new_client.communication_fd = accept(server.give_connexion_fd(), (struct sockaddr *) &new_client.address, &new_client.address_len);
-		if (new_client.communication_fd != -1)	// si une nouvelle connexion est arrivée
+		int		ret;
+
+		ret = poll(server.poll_struct.data(), server.poll_struct.size(), -1);
+		if (ret == -1)
 		{
-			try
-			{
-				new_client.set_non_blocking_fd();
-			}
-			catch (const std::exception &e)
-			{
-				close(new_client.communication_fd);
-				continue ;
-			}
-
-			new_client.ipv4 = new_client.ip_to_string();
-			new_client.port = new_client.address.sin_port;
-
-			std::cout << "Connexion de " << COLOR_BOLD << new_client.ipv4 << COLOR_DIM << ":" << new_client.port << COLOR_RESET << std::endl;
-			server.clients.push_back(new_client);
+			perror("poll");
+			return (1);								// !!! Ajouter close()
 		}
-		
-		std::vector<Client> :: iterator it = server.clients.begin();
-		
-		while (it != server.clients.end() )
+
+		if (server.new_connexion() )
 		{
+			Client	new_client;
+
+			new_client.communication_fd = accept(server.give_connexion_fd(), (struct sockaddr *) &new_client.address, &new_client.address_len);
+			if (new_client.communication_fd != -1)	// si une nouvelle connexion est arrivée
+			{
+				if (new_client.set_non_blocking_fd() )
+					continue ;
+				new_client.ipv4 = new_client.ip_to_string();
+				new_client.port = new_client.address.sin_port;
+				new_client.poll_struct = server.add_fd_poll_struct(new_client.communication_fd, POLLIN);
+				new_client.it = server.poll_struct.end() - 1;
+				server.clients.push_back(new_client);
+
+				std::cout << "Connexion de " << COLOR_BOLD << new_client.ipv4 << COLOR_BLUE << ":" << new_client.port << COLOR_RESET << "\n" << std::endl;
+			}	
+		}
+
+		clients_poll_struct_check(server);
+	}
+
+	close(server.give_connexion_fd());
+
+	return (0);
+}
+
+static void	clients_poll_struct_check(Server &server)
+{
+	std::vector<Client> :: iterator it = server.clients.begin();
+
+	while (it != server.clients.end() )
+	{
+		if (it->poll_struct && it->poll_struct->revents & (POLLIN | POLLERR | POLLHUP) )
+		{
+			char	*hello = "HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 12\n\nHello world!";
 			char	buffer[3000] = {0};
 			ssize_t	ret;
 			bool	disconnect;
@@ -53,38 +72,18 @@ int	client_accept(Server &server)
 			disconnect = false;
 			ret = recv(it->communication_fd, buffer, sizeof(buffer), 0);
 			if (ret > 0)
-				std::cout << "[" << it->ipv4 << ":" << it->port << "]" << buffer << std::endl;
-			else if (ret == 0)	// la connexion a été fermée par le client
-				disconnect = true;
-			else if (ret == -1 && errno != EWOULDBLOCK)
-				disconnect = true;
-			//else
-			//{
-			//	std::cout << (errno == EWOULDBLOCK) << std::endl;
-			//}
-
-			if (!test)
 			{
-				char	*hello = "HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 12\n\nHello world!";
-				char	buffer2[3000] = {0};
-			
-				write(new_client.communication_fd , hello , strlen(hello));
-				//recv(new_client.communication_fd, buffer2, sizeof(buffer2), 0);
-				//std::cout << buffer2 << std::endl;
-				test++;
+				write(server.clients.back().communication_fd , hello , strlen(hello));
+				std::cout << "[" << COLOR_BOLD << it->ipv4 << COLOR_BLUE << ":" << it->port << COLOR_RESET << "]" << buffer << std::endl;
 			}
-
-			if (disconnect)
+			else									// la connexion a été fermée par le client
 			{
-				std::cout << "Déconnexion de [" << it->ipv4 << ":" << it->port << "]" << std::endl;
+				server.poll_struct.erase(it->it);
 				it = server.clients.erase(it);
+				std::cout << COLOR_RED << "Déconnexion de [" << it->ipv4 << ":" << it->port << "]" << COLOR_RESET << "\n" << std::endl;
+				continue ;
 			}
-			else
-				it++;
 		}
+		it++;
 	}
-
-	close(server.give_connexion_fd());
-
-	return (0);
 }
