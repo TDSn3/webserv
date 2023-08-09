@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 08:57:10 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/07 10:44:19 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/09 09:02:55 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ class Client
 		{
 			memset( (char *) &address, 0, sizeof(address) );
 			address_len = sizeof(address);
+			poll_struct = NULL;
 		}
 
 		void	set_non_blocking_fd(void)
@@ -58,6 +59,7 @@ class Client
 		socklen_t			address_len;
 		std::string			ipv4;
 		in_port_t			port;
+		pollfd				*poll_struct;
 
 	protected:
 
