@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 14:22:45 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/09 13:34:33 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/10 09:51:37 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	client_accept(Server &server)
 	{
 		int		ret;
 
-		ret = poll(server.poll_struct.data(), server.poll_struct.size(), 0);
+		ret = poll(server.poll_struct.data(), static_cast<nfds_t>(server.poll_struct.size() ), 0);
 		if (ret == -1)
 		{
 			perror("poll");
@@ -58,29 +58,27 @@ int	client_accept(Server &server)
 
 static void	clients_poll_struct_check(Server &server)
 {
+	std::string						hello("HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 12\n\nHello world!");
 	std::vector<Client> :: iterator it = server.clients.begin();
 
 	while (it != server.clients.end() )
 	{
 		if (it->poll_struct && it->poll_struct->revents & (POLLIN | POLLERR | POLLHUP) )
 		{
-			char	*hello = "HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 12\n\nHello world!";
 			char	buffer[3000] = {0};
 			ssize_t	ret;
-			bool	disconnect;
 
-			disconnect = false;
 			ret = recv(it->communication_fd, buffer, sizeof(buffer), 0);
 			if (ret > 0)
 			{
-				write(server.clients.back().communication_fd , hello , strlen(hello));
+				write(server.clients.back().communication_fd , hello.c_str() , strlen(hello.c_str() ) );
 				std::cout << "[" << COLOR_BOLD << it->ipv4 << COLOR_BLUE << ":" << it->port << COLOR_RESET << "]" << buffer << std::endl;
 			}
 			else									// la connexion a été fermée par le client
 			{
+				std::cout << COLOR_RED << "Déconnexion de [" << it->ipv4 << ":" << it->port << "]" << COLOR_RESET << "\n" << std::endl;
 				server.poll_struct.erase(it->it);
 				it = server.clients.erase(it);
-				std::cout << COLOR_RED << "Déconnexion de [" << it->ipv4 << ":" << it->port << "]" << COLOR_RESET << "\n" << std::endl;
 				continue ;
 			}
 		}
