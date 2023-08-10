@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 14:22:45 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/10 09:51:37 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/10 10:21:24 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ static void	clients_poll_struct_check(Server &server)
 			if (ret > 0)
 			{
 				write(server.clients.back().communication_fd , hello.c_str() , strlen(hello.c_str() ) );
-				std::cout << "[" << COLOR_BOLD << it->ipv4 << COLOR_BLUE << ":" << it->port << COLOR_RESET << "]" << buffer << std::endl;
+				std::cout << "[" << COLOR_BOLD << it->ipv4 << COLOR_BLUE << ":" << it->port << COLOR_RESET << "]\n" << buffer << std::endl;
 			}
 			else									// la connexion a été fermée par le client
 			{

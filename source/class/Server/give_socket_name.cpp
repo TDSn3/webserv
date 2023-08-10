@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 15:03:33 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/07 10:34:33 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/10 10:23:47 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 /*				  en une représentation réseau.								  */
 /*                                                                            */
 /* ************************************************************************** */
-int	Server::give_socket_name(struct sockaddr_in *address, const int PORT, int server_fd)
+void	Server::give_socket_name(struct sockaddr_in *address, const int PORT, int server_fd)
 {
 	memset( (char *) address, 0, sizeof(*address) );
 	address->sin_family = AF_INET;
@@ -29,9 +29,7 @@ int	Server::give_socket_name(struct sockaddr_in *address, const int PORT, int se
 
 	if (bind(server_fd, (struct sockaddr *) address, sizeof(*address) ) < 0) 
 	{
-		perror("bind failed"); 
-		return (1);
+		perror("bind failed");
+		throw (std::exception() );
 	}
-
-	return (0);
 }

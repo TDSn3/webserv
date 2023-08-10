@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 08:58:53 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/09 13:18:40 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/10 10:25:52 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,7 @@
 Server::Server(const int port) : port(port)
 {
 	_connexion_fd = creat_socket();							// Crée un socket pour ce connecter au serveur
-	if (_connexion_fd < 0) 
-		throw (std::exception() );
-
-	if (give_socket_name(&_address, port, _connexion_fd))	// Affecte un "nom" au socket crée
-		throw (std::exception() );
+	give_socket_name(&_address, port, _connexion_fd);		// Affecte un "nom" au socket crée
 
 	if (listen(_connexion_fd, 3) < 0)						// Prépare le socket pour la connexion
 	{
