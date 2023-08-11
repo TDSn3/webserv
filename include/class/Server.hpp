@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 08:57:10 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/10 10:24:47 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/11 13:17:16 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,8 @@ class Server
 {
 	public:
 	
-		Server(const int port);
-		Server(const Server &src);
-		~Server(void);
+							Server(const int port);		// ! throw possible
+							~Server(void);
 
 		int					give_connexion_fd(void);
 		bool				new_connexion(void);

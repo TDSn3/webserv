@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Server.cpp                                         :+:      :+:    :+:   */
+/*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 08:58:53 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/11 13:18:10 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/11 13:13:07 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,24 +17,32 @@
 /*   CONSTRUCTEUR															  */
 /*                                                                            */
 /* ************************************************************************** */
-Server::Server(const int port) : port(port)
+Client::Client(void)
 {
-	_connexion_fd = creat_socket();							// Crée un socket pour ce connecter au serveur	// ! throw possible
-	give_socket_name(&_address, port, _connexion_fd);		// Affecte un "nom" au socket crée				// ! throw possible
+	memset( (char *) &address, 0, sizeof(address) );
+	address_len = sizeof(address);
+	poll_struct = NULL;
+}
 
-	if (listen(_connexion_fd, 3) < 0)						// Prépare le socket pour la connexion
+Client::Client(Server &server)
+{
+	memset( (char *) &address, 0, sizeof(address) );
+	address_len = sizeof(address);
+	poll_struct = NULL;
+
+	communication_fd = accept(server.give_connexion_fd(), (struct sockaddr *) &address, &address_len);
+
+	if (communication_fd != 1)	// si une nouvelle connexion est arrivée et donc qu'il y a un client a créer
 	{
-		perror("listen");
-		throw (std::exception() );
-	}
+		set_non_blocking_fd();	// ! throw possible
+		ipv4 = ip_to_string();
+		port = address.sin_port;
+		poll_struct = server.add_fd_poll_struct(communication_fd, POLLIN);
+		it = server.poll_struct.end() - 1;
+		server.clients.push_back(*this);
 
-	if (fcntl(_connexion_fd, F_SETFL, O_NONBLOCK) )			// unique utilisation autorisé par le sujet
-	{
-		perror("fcntl");
-		throw (std::exception() );
+		std::cout << "Connexion de " << COLOR_BOLD << ipv4 << COLOR_BLUE << ":" << port << COLOR_RESET << "\n" << std::endl;
 	}
-
-	add_fd_poll_struct(_connexion_fd, POLLIN);				// ajoute le socket à la struct de poll
 }
 
 /*   COPY CONSTRUCTEUR   **************************************************** */
@@ -44,12 +52,6 @@ Server::Server(const int port) : port(port)
 /*   DESTRUCTEUR															  */
 /*                                                                            */
 /* ************************************************************************** */
-Server::~Server(void)
-{
-	for (std::vector<Client> :: iterator it = clients.begin(); it != clients.end(); it++)
-		close(it->communication_fd);
-	close(_connexion_fd);
-}
 
 /* ************************************************************************** */
 /*                                                                            */
@@ -69,14 +71,27 @@ Server::~Server(void)
 
 /*   MÉTHODE PUBLIC   ******************************************************* */
 
-int		Server::give_connexion_fd(void)
+int			Client::set_non_blocking_fd(void)
 {
-	return (_connexion_fd);
+	if (fcntl(communication_fd, F_SETFL, O_NONBLOCK) )	// unique utilisation autorisé par le sujet
+	{
+		close(communication_fd);
+		perror("fcntl");
+		throw (std::exception() );
+		return (1);
+	}
+	return (0);
 }
 
-bool	Server::new_connexion(void)
+std::string	Client::ip_to_string(void)
 {
-	return (poll_struct[0].revents & POLLIN);
+	std::stringstream	ss;
+	ss << static_cast<int>(address.sin_addr.s_addr & 0xFF) << '.'
+		<< static_cast<int>( (address.sin_addr.s_addr >> 8) & 0xFF) << '.'
+		<< static_cast<int>( (address.sin_addr.s_addr >> 16) & 0xFF) << '.'
+		<< static_cast<int>( (address.sin_addr.s_addr >> 24) & 0xFF);
+
+	return (ss.str() );
 }
 
 /*   MÉTHODE PRIVATE   ****************************************************** */

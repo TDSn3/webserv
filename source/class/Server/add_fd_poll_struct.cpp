@@ -1,37 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   add_fd_poll_struct.cpp                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/11 15:58:01 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/11 13:14:19 by tda-silv         ###   ########.fr       */
+/*   Created: 2023/08/11 12:41:16 by tda-silv          #+#    #+#             */
+/*   Updated: 2023/08/11 12:41:34 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <header.hpp>
 
-volatile sig_atomic_t	siginit_status = 0;
-
-int	main(int argc, char **argv)
+pollfd	*Server::add_fd_poll_struct(int fd, short events)
 {
-	(void) argc;
-	(void) argv;
+	pollfd	new_poll_struct;
 
-	signal(SIGINT, handler);
-	try
-	{
-		Server	server(8080);
+	new_poll_struct.fd = fd; 
+	new_poll_struct.events = events;
+	new_poll_struct.revents = 0;
+	poll_struct.push_back(new_poll_struct);
 
-		std::cout << "\nLe serveur démarre sur le port " << COLOR_BOLD_BLUE << server.port << COLOR_RESET << std::endl;
-
-		client_accept(server);
-	}
-	catch(const std::exception &e)
-	{
-		return (1);
-	}
-
-	return (0);
+	return (&poll_struct.back() );
 }

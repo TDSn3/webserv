@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:58:36 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/07 08:57:46 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/11 13:15:14 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,9 @@
 # include "class/Server.hpp"
 # include "class/Client.hpp"
 
-int	client_accept(Server &server);
+extern volatile sig_atomic_t	siginit_status;
+
+void	client_accept(Server &server);
+void	handler(int sig);
 
 #endif

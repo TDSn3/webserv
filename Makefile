@@ -6,7 +6,7 @@
 #    By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/30 09:01:22 by tda-silv          #+#    #+#              #
-#    Updated: 2023/08/07 09:22:50 by tda-silv         ###   ########.fr        #
+#    Updated: 2023/08/11 13:22:51 by tda-silv         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ INC_DIR		= include/
 
 CC			= c++
 
-CFLAGS		= -Wall -Wextra -Wshadow -Wconversion -std=c++98
+CFLAGS		= -Wall -Wextra -Werror -Wshadow -Wconversion -std=c++98
 
 # **************************************************************************** #
 #                                                                              #
