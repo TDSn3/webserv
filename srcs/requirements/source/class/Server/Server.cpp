@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 08:58:53 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/11 13:18:10 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/14 16:48:24 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,24 +17,24 @@
 /*   CONSTRUCTEUR															  */
 /*                                                                            */
 /* ************************************************************************** */
-Server::Server(const int port) : port(port)
+Server::Server(const int desired_port) : port(desired_port)
 {
-	_connexion_fd = creat_socket();							// Crée un socket pour ce connecter au serveur	// ! throw possible
-	give_socket_name(&_address, port, _connexion_fd);		// Affecte un "nom" au socket crée				// ! throw possible
+	_connexion_fd = creat_socket();					// Crée un socket pour ce connecter au serveur	// ! throw possible
+	give_socket_name();								// Affecte un "nom" au socket crée				// ! throw possible
 
-	if (listen(_connexion_fd, 3) < 0)						// Prépare le socket pour la connexion
+	if (listen(_connexion_fd, 3) < 0)				// Prépare le socket pour la connexion
 	{
 		perror("listen");
 		throw (std::exception() );
 	}
 
-	if (fcntl(_connexion_fd, F_SETFL, O_NONBLOCK) )			// unique utilisation autorisé par le sujet
+	if (fcntl(_connexion_fd, F_SETFL, O_NONBLOCK) )	// unique utilisation autorisé par le sujet
 	{
 		perror("fcntl");
 		throw (std::exception() );
 	}
 
-	add_fd_poll_struct(_connexion_fd, POLLIN);				// ajoute le socket à la struct de poll
+	add_fd_poll_struct(_connexion_fd, POLLIN);		// ajoute le socket à la struct de poll
 }
 
 /*   COPY CONSTRUCTEUR   **************************************************** */

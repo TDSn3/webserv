@@ -5,73 +5,40 @@
 #                                                     +:+ +:+         +:+      #
 #    By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/12/30 09:01:22 by tda-silv          #+#    #+#              #
-#    Updated: 2023/08/11 13:22:51 by tda-silv         ###   ########.fr        #
+#    Created: 2023/08/14 16:32:49 by tda-silv          #+#    #+#              #
+#    Updated: 2023/08/14 16:35:14 by tda-silv         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME		= webserv
+all:
+	@docker-compose -f ./srcs/docker-compose.yml up -d --build
 
-SRC_DIR		= source/
-OBJ_DIR		= object/
-INC_DIR		= include/
+ps:
+	docker image ls
+	@echo ""
+	docker ps
+	@echo ""
+	docker volume ls	
 
-CC			= c++
+start:
+	@docker-compose -f ./srcs/docker-compose.yml start
 
-CFLAGS		= -Wall -Wextra -Werror -Wshadow -Wconversion -std=c++98
+stop: 
+	@docker-compose -f ./srcs/docker-compose.yml stop
 
-# **************************************************************************** #
-#                                                                              #
-#   -I   | Chemin du dossier où trouver un .h								   #
-#   -L   | Chemin du dossier où trouver un .a								   #
-#   -l   | Nom du .a sans le préfixe "lib"									   #
-#                                                                              #
-# **************************************************************************** #
-
-I_HEADER	= -I $(INC_DIR)
-
-HEADER		= $(shell find include/ -type f)
-
-SEARCH_FILE	= $(shell find $(SRC_DIR) -type f -name "*.cpp")
-NAME_FILE	= $(shell echo $(SEARCH_FILE) | sed 's|source/||g' | sed 's|\.cpp||g')
-
-SRC			= $(addsuffix .cpp, $(addprefix $(SRC_DIR), $(NAME_FILE)))
-OBJ			= $(addsuffix .o, $(addprefix $(OBJ_DIR), $(NAME_FILE)))
-DEPENDS		= $(addsuffix .d, $(addprefix $(OBJ_DIR), $(NAME_FILE)))
-
-# **************************************************************************** #
-#                                                                              #
-#   $@   | Le nom de la cible												   #
-#   $<   | Le nom de la première dépendance									   #
-#   $^   | La liste des dépendances											   #
-#   $?   | La liste des dépendances plus récentes que la cible				   #
-#   $*   | Le nom du fichier sans suffixe									   #
-#                                                                              #
-# **************************************************************************** #
-
-# **************************************************************************** #
-#                                                                              #
-#   Relink si les headers ou le Makfile sont changés                           #
-#                                                                              #
-# *****************************vvvvvvvvvvvvvvvvvv***************************** #
-
-$(OBJ_DIR)%.o: $(SRC_DIR)%.cpp $(HEADER) Makefile
-	@ mkdir -p $(dir $@)
-	$(CC) $(CFLAGS) $(I_HEADER) -MMD -MP -c $< -o $@
-
-all: $(NAME)
-
-$(NAME): $(OBJ)
-	$(CC) $(OBJ) $(I_HEADER) -o $(NAME)
+down: 
+	@docker-compose -f ./srcs/docker-compose.yml down
 
 clean:
-	rm -rf $(OBJ_DIR)
+	@docker-compose -f ./srcs/docker-compose.yml kill
+	@echo ""
+	@docker system prune -a -f
+	@if [ $$(docker volume ls -q | wc -l) -gt 0 ]; then	\
+		docker volume rm $$(docker volume ls -q);		\
+	fi
 
-fclean: clean
-	rm -f $(NAME)
+re: clean all
 
-re: fclean all
+#-----------------------#
 
--include $(DEPENDS)
-
-.PHONY: all clean fclean re
+.PHONY: all ps start stop down clean re
