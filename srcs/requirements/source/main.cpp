@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:58:01 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/15 15:57:44 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/15 16:41:46 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,12 @@ int	main(int argc, char **argv)
 	(void) argv;
 
 	signal(SIGINT, handler);
+
+	std::ofstream	log_file("log");
+
+	std::cout.rdbuf(log_file.rdbuf() );
+	std::cerr.rdbuf(log_file.rdbuf() );
+
 	try
 	{
 		Server	server(8080);
