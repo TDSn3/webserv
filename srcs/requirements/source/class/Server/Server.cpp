@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 08:58:53 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/14 16:48:24 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/15 15:16:56 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,12 @@ Server::Server(const int desired_port) : port(desired_port)
 Server::~Server(void)
 {
 	for (std::vector<Client> :: iterator it = clients.begin(); it != clients.end(); it++)
+	{
 		close(it->communication_fd);
+		std::cout << "Server: Client: close: " << it->communication_fd << std::endl;
+	}
 	close(_connexion_fd);
+	std::cout << "Server: close: " << _connexion_fd << std::endl;
 }
 
 /* ************************************************************************** */

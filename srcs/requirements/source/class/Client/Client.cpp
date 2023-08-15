@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 08:58:53 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/11 13:13:07 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/15 15:14:58 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ int			Client::set_non_blocking_fd(void)
 	if (fcntl(communication_fd, F_SETFL, O_NONBLOCK) )	// unique utilisation autorisé par le sujet
 	{
 		close(communication_fd);
+		std::cout << "Client: fcntl: close: " << communication_fd << std::endl;
 		perror("fcntl");
 		throw (std::exception() );
 		return (1);
