@@ -6,7 +6,7 @@
 #    By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/14 16:32:49 by tda-silv          #+#    #+#              #
-#    Updated: 2023/08/15 16:05:56 by tda-silv         ###   ########.fr        #
+#    Updated: 2023/08/16 10:45:27 by tda-silv         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,11 +29,13 @@ stop:
 down: 
 	@docker-compose -f ./srcs/docker-compose.yml down
 
-#------------------------------------------------------------------------------#
-# Manual     														           #
-#------------------------------------------------------------------------------#
+# **************************************************************************** #
+#                                                                              #
+#   Manual     														           #
+#                                                                              #
+# **************************************************************************** #
 
-manual:
+build_run:
 	@docker build -t webserv srcs/requirements
 	@docker run				\
 		-d					\
@@ -63,13 +65,16 @@ run_it:
 it_webserv:
 	@docker exec -it $$(docker ps --filter name=webserv --format "{{.ID}}") bash
 
-it_ps_webserv:
+ps_webserv:
 	@docker exec -it $$(docker ps --filter name=webserv --format "{{.ID}}") ps aux
+
+cat_log_webserv:
+	@docker exec -it $$(docker ps --filter name=webserv --format "{{.ID}}") cat log
 
 kill_webserv:
 	@docker kill $$(docker ps --filter name=webserv --format "{{.ID}}")
 
-#------------------------------------------------------------------------------#
+# **************************************************************************** #
 
 clean:
 	@docker-compose -f ./srcs/docker-compose.yml kill
@@ -79,8 +84,9 @@ clean:
 		docker volume rm $$(docker volume ls -q);		\
 	fi
 
+fclean: clean
+	make -C srcs/requirements fclean
+
 re: clean all
 
-#------------------------------------------------------------------------------#
-
-.PHONY: all ps start stop down manual build run_d run_it it_webserv kill_webserv clean re
+.PHONY: all ps start stop down build_run build run_d run_it it_webserv ps_webserv cat_log_webserv kill_webserv clean re

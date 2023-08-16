@@ -3,12 +3,10 @@
 # For macOS
 #
 
-FROM		ubuntu:22.04
+FROM		debian:buster
 
 RUN			apt-get update				\
 				&& apt-get install -y	\
-					curl				\
-					vim					\
 					gcc					\
 					g++					\
 					make				\
@@ -22,5 +20,4 @@ RUN			make re
 EXPOSE		8080
 
 CMD			["./webserv"]
-# CMD			./webserv > ./log 2>&1
-# CMD			valgrind ./webserv > ./log 2>&1
+# CMD			["valgrind", "./webserv"]
