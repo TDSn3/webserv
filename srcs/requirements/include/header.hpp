@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:58:36 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/23 12:34:28 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/23 15:21:14 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 # include <sys/time.h>
 # include <sys/types.h>
 # include <poll.h>
-//# include <sys/event.h>
 # include <sys/socket.h>
 # include <netdb.h>
 # include <fcntl.h>
@@ -41,6 +40,7 @@
 # include "class/Server.hpp"
 # include "class/Client.hpp"
 # include "class/LogFile.hpp"
+# include "class/HttpRequest.hpp"
 
 extern volatile sig_atomic_t	siginit_status;
 

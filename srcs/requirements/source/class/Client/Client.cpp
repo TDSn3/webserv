@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 08:58:53 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/23 13:04:33 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/23 15:36:10 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 /* ************************************************************************** */
 Client::Client(void)
 {
+	buffer_clear();
 	memset( (char *) &address, 0, sizeof(address) );
 	address_len = sizeof(address);
 	poll_struct = NULL;
@@ -26,6 +27,7 @@ Client::Client(void)
 
 Client::Client(Server &server)
 {
+	buffer_clear();
 	memset( (char *) &address, 0, sizeof(address) );
 	address_len = sizeof(address);
 	poll_struct = NULL;
@@ -92,6 +94,11 @@ std::string	Client::ip_to_string(void)
 		<< static_cast<int>( (address.sin_addr.s_addr >> 24) & 0xFF);
 
 	return (ss.str() );
+}
+
+void	Client::buffer_clear(void)
+{
+	memset(buffer, 0, sizeof(buffer) );
 }
 
 /*   MÉTHODE PRIVATE   ****************************************************** */

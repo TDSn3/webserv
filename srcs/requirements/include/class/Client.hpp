@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 08:57:10 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/11 13:02:55 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/23 15:40:11 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,10 @@
 
 # include <iostream>
 # include <sstream>
+
+# include "HttpRequest.hpp"
+
+# define BUFFER_CLIENT_SIZE 4096
 
 class Server;
 
@@ -27,6 +31,7 @@ class Client
 
 		int								set_non_blocking_fd(void);
 		std::string						ip_to_string(void);
+		void							buffer_clear(void);
 
 		int								communication_fd;
 		struct sockaddr_in				address;
@@ -35,6 +40,8 @@ class Client
 		in_port_t						port;
 		pollfd							*poll_struct;
 		std::vector<pollfd> :: iterator	it;
+		char							buffer[BUFFER_CLIENT_SIZE];
+		HttpRequest						request;
 
 	protected:
 

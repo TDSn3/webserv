@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 14:22:45 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/23 13:10:34 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/23 15:45:58 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,27 @@ static void	clients_poll_struct_check(Server &server)
 	{
 		if (it->poll_struct && it->poll_struct->revents & (POLLIN | POLLERR | POLLHUP) )
 		{
-			char					buffer[3000] = {0};
+			it->buffer_clear();
+			
 			ssize_t					ret;
 
-			ret = recv(it->communication_fd, buffer, sizeof(buffer), 0);
+			ret = recv(it->communication_fd, it->buffer, sizeof(it->buffer), 0);
 			if (ret > 0)
 			{
-				write(server.clients.back().communication_fd , hello.c_str() , strlen(hello.c_str() ) );
-				std::cout << "[" << COLOR_BOLD << it->ipv4 << COLOR_BLUE << ":" << it->port << COLOR_RESET << "]\n" << buffer << std::endl;
+				it->request.data += it->buffer;
+				if (ret < BUFFER_CLIENT_SIZE)
+				{
+					std::cout << COLOR_BOLD_RED << "BUFFER : " << ret << " / " << BUFFER_CLIENT_SIZE << COLOR_RESET << std::endl;
+
+					write(server.clients.back().communication_fd , hello.c_str() , strlen(hello.c_str() ) );
+					std::cout << "[" << COLOR_BOLD << it->ipv4 << COLOR_BLUE << ":" << it->port << COLOR_RESET << "]\n" << it->request.data << std::endl;
+
+					it->request.clear();
+				}
+				else
+				{
+					std::cout << COLOR_BOLD_RED << "BUFFER FULL : " << ret << " / " << BUFFER_CLIENT_SIZE << COLOR_RESET << std::endl;
+				}
 			}
 			else	// la connexion a été fermée par le client
 			{

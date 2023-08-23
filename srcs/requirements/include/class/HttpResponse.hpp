@@ -1,40 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   HttpResponse.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/11 15:58:01 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/23 13:27:58 by tda-silv         ###   ########.fr       */
+/*   Created: 2023/08/23 15:43:46 by tda-silv          #+#    #+#             */
+/*   Updated: 2023/08/23 15:45:11 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <header.hpp>
+#ifndef HTTPRESPONSE_HPP
+# define HTTPRESPONSE_HPP
 
-volatile sig_atomic_t	siginit_status = 0;
+# include <iostream>
 
-int	main(int argc, char **argv)
+class HttpResponse
 {
-	(void) argc;
-	(void) argv;
+	public:
 
-	signal(SIGINT, handler);
+		void	clear(void)
+		{
+			data.clear();
+			request_line.clear();
+			header.clear();
+			body.clear();
+		};
 
-	//LogFile		log_file;
+		std::string	data;
+		std::string	request_line;
+		std::string	header;
+		std::string	body;
 
-	try
-	{
-		Server	server(8080);
+	protected:
 
-		std::cout << "\nLe serveur démarre sur le port " << COLOR_BOLD_BLUE << server.port << COLOR_RESET << std::endl;
+	private:
 
-		client_accept(server);
-	}
-	catch(const std::exception &e)
-	{
-		return (1);
-	}
+};
 
-	return (0);
-}
+#endif
+
