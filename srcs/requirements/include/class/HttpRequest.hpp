@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 13:55:10 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/23 15:45:14 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/23 16:31:08 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,15 @@
 # define HTTPREQUEST_HPP
 
 # include <iostream>
+
+# include "../enum.hpp"
+
+struct request_line
+{
+	HttpMethod	method;
+	std::string	uri;
+	std::string	version;
+};
 
 /* ************************************************************************** */
 /*                                                                            */
@@ -37,15 +46,26 @@ class HttpRequest
 		void	clear(void)
 		{
 			data.clear();
-			request_line.clear();
-			header.clear();
-			body.clear();
+			s_request_line.clear();
+			s_header.clear();
+			s_body.clear();
+			
+			rl.method = EMPTY;
+			rl.uri.clear();
+			rl.version.clear();
 		};
 
-		std::string	data;
-		std::string	request_line;
-		std::string	header;
-		std::string	body;
+		void	parsing(void)
+		{
+			
+		};
+
+		std::string		data;
+
+		std::string		s_request_line;
+		request_line	rl;
+		std::string		s_header;
+		std::string		s_body;
 
 	protected:
 

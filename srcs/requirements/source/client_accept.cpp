@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 14:22:45 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/23 15:45:58 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/23 16:22:44 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,12 @@ static void	clients_poll_struct_check(Server &server)
 				{
 					std::cout << COLOR_BOLD_RED << "BUFFER : " << ret << " / " << BUFFER_CLIENT_SIZE << COLOR_RESET << std::endl;
 
-					write(server.clients.back().communication_fd , hello.c_str() , strlen(hello.c_str() ) );
 					std::cout << "[" << COLOR_BOLD << it->ipv4 << COLOR_BLUE << ":" << it->port << COLOR_RESET << "]\n" << it->request.data << std::endl;
 
+					it->request.parsing();
 					it->request.clear();
+
+					write(it->communication_fd , hello.c_str() , hello.size() );
 				}
 				else
 				{

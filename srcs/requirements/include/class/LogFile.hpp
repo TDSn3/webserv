@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 12:26:30 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/23 12:44:22 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/23 15:47:55 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ class LogFile
 			std::cout.rdbuf(_log_file.rdbuf() );	//
 			std::cerr.rdbuf(_log_file.rdbuf() );	//	
 		};
+
 		~LogFile(void)
 		{
 			std::cout.rdbuf(_cout_buffer);
