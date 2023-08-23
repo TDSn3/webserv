@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:58:01 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/16 10:36:47 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/23 12:38:27 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,7 @@ int	main(int argc, char **argv)
 
 	signal(SIGINT, handler);
 
-	std::ofstream	log_file("log");	// redirige cout et cerr vers le fichier log
-										//
-	std::cout.rdbuf(log_file.rdbuf() );	//
-	std::cerr.rdbuf(log_file.rdbuf() );	//
+	LogFile		log_file;
 
 	try
 	{

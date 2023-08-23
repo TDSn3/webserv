@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/01 15:03:33 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/14 16:52:47 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/23 12:56:18 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	Server::give_socket_name(void)
 
 	if (bind(_connexion_fd, (struct sockaddr *) &_address, sizeof(_address) ) < 0) 
 	{
+		this->~Server();
 		perror("bind failed");
 		throw (std::exception() );
 	}

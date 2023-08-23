@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 08:57:10 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/14 16:49:31 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/23 13:03:32 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ class Server
 
 	private:
 
-		int					creat_socket(void);
+		void				creat_socket(void);
 		void				give_socket_name(void);
 
 		int					_connexion_fd;
