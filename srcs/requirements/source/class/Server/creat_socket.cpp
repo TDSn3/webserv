@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   creat_socket.cpp                                   :+:      :+:    :+:   */
+/*   _creat_socket.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -18,7 +18,7 @@
 /*   SOCK_STREAM	: flux d'octets full-duplex.							  */
 /*                                                                            */
 /* ************************************************************************** */
-void	Server::creat_socket(void)
+void	Server::_creat_socket(void)
 {
 	_connexion_fd = socket(AF_INET, SOCK_STREAM, 0);
 	if (_connexion_fd < 0) 

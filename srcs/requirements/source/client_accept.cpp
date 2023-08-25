@@ -6,13 +6,15 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 14:22:45 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/23 16:22:44 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/25 10:04:02 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <header.hpp>
 
 static void	clients_poll_struct_check(Server &server);
+
+size_t i = 0;
 
 void	client_accept(Server &server)
 {
@@ -54,7 +56,7 @@ static void	clients_poll_struct_check(Server &server)
 
 	while (it != server.clients.end() )
 	{
-		if (it->poll_struct && it->poll_struct->revents & (POLLIN | POLLERR | POLLHUP) )
+		if (server.poll_struct[ it->index_vector_poll_struct ].revents & (POLLIN | POLLERR | POLLHUP) )
 		{
 			it->buffer_clear();
 			
@@ -80,11 +82,14 @@ static void	clients_poll_struct_check(Server &server)
 					std::cout << COLOR_BOLD_RED << "BUFFER FULL : " << ret << " / " << BUFFER_CLIENT_SIZE << COLOR_RESET << std::endl;
 				}
 			}
-			else	// la connexion a été fermée par le client
+			else											// la connexion a été fermée par le client
 			{
 				std::cout << COLOR_RED << "Déconnexion de [" << it->ipv4 << ":" << it->port << "]" << COLOR_RESET << "\n" << std::endl;
-				server.poll_struct.erase(it->it);
-				it = server.clients.erase(it);
+				server.poll_struct.erase(
+					server.poll_struct.begin()
+					+ static_cast<long>(
+						it->index_vector_poll_struct) );	// itérateur dans la class Client vers sa poll_struct stockée dans Server
+				it = server.clients.erase(it);				// supprime le Client de std::vector stockée dans Server
 				continue ;
 			}
 		}

@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 08:58:53 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/23 15:36:10 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/25 10:03:35 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ Client::Client(void)
 	buffer_clear();
 	memset( (char *) &address, 0, sizeof(address) );
 	address_len = sizeof(address);
-	poll_struct = NULL;
+	index_vector_poll_struct = 0;
 }
 
 Client::Client(Server &server)
@@ -30,17 +30,24 @@ Client::Client(Server &server)
 	buffer_clear();
 	memset( (char *) &address, 0, sizeof(address) );
 	address_len = sizeof(address);
-	poll_struct = NULL;
 
 	communication_fd = accept(server.give_connexion_fd(), (struct sockaddr *) &address, &address_len);
 
-	if (communication_fd != 1)	// si une nouvelle connexion est arrivée et donc qu'il y a un client a créer
+	if (communication_fd != 1)				// si une nouvelle connexion est arrivée et donc qu'il y a un client a créer
 	{
-		set_non_blocking_fd();	// ! throw possible
+		set_non_blocking_fd();				// ! throw possible
 		ipv4 = ip_to_string();
 		port = address.sin_port;
-		poll_struct = server.add_fd_poll_struct(communication_fd, POLLIN);
-		it = server.poll_struct.end() - 1;
+		server.add_fd_poll_struct(communication_fd, POLLIN);
+		index_vector_poll_struct =  server.poll_struct.size();
+		if (index_vector_poll_struct > 1)	// [0] doit toujours être déjà attribué
+			index_vector_poll_struct--;
+		else
+		{
+			close(communication_fd);
+			perror("poll_struct size");
+			throw (std::exception() );
+		}
 		server.clients.push_back(*this);
 
 		std::cout << "Connexion de " << COLOR_BOLD << ipv4 << COLOR_BLUE << ":" << port << COLOR_RESET << "\n" << std::endl;

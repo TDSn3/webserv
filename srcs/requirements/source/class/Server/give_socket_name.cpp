@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   give_socket_name.cpp                               :+:      :+:    :+:   */
+/*   _assign_socket_name.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -20,7 +20,7 @@
 /*				  en une représentation réseau.								  */
 /*                                                                            */
 /* ************************************************************************** */
-void	Server::give_socket_name(void)
+void	Server::_assign_socket_name(void)
 {
 	memset( (char *) &_address, 0, sizeof(_address) );
 	_address.sin_family = AF_INET;

@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 08:57:10 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/23 13:03:32 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/25 08:45:43 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ class Server
 
 		int					give_connexion_fd(void);
 		bool				new_connexion(void);
-		pollfd				*add_fd_poll_struct(int fd, short events);
+		void				add_fd_poll_struct(int fd, short events);
 
 		const int			port;
 		std::vector<Client>	clients;
@@ -34,8 +34,8 @@ class Server
 
 	private:
 
-		void				creat_socket(void);
-		void				give_socket_name(void);
+		void				_creat_socket(void);
+		void				_assign_socket_name(void);
 
 		int					_connexion_fd;
 		struct sockaddr_in	_address;

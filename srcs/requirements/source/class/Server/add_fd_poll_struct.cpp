@@ -6,13 +6,13 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/11 12:41:16 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/11 12:41:34 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/25 10:08:29 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <header.hpp>
 
-pollfd	*Server::add_fd_poll_struct(int fd, short events)
+void	Server::add_fd_poll_struct(int fd, short events)
 {
 	pollfd	new_poll_struct;
 
@@ -20,6 +20,4 @@ pollfd	*Server::add_fd_poll_struct(int fd, short events)
 	new_poll_struct.events = events;
 	new_poll_struct.revents = 0;
 	poll_struct.push_back(new_poll_struct);
-
-	return (&poll_struct.back() );
 }

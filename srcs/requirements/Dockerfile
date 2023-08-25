@@ -16,11 +16,11 @@ RUN			apt-get update				\
 WORKDIR		/app
 COPY		. /app
 
-RUN			make re
+# RUN			make re
 
 EXPOSE		8080
 
-CMD			["./webserv"]
+# CMD			["./webserv"]
 #CMD			["valgrind", "./webserv"]
 #CMD			["valgrind", "--tool=memcheck", "--track-origins=yes", "--leak-check=full", "--show-leak-kinds=all", "--track-fds=yes", "./webserv"]
 
