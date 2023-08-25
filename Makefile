@@ -6,7 +6,7 @@
 #    By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/14 16:32:49 by tda-silv          #+#    #+#              #
-#    Updated: 2023/08/24 18:00:03 by tda-silv         ###   ########.fr        #
+#    Updated: 2023/08/25 11:40:47 by tda-silv         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -68,7 +68,7 @@ it_webserv:
 ps_webserv:
 	@docker exec -it $$(docker ps --filter name=webserv --format "{{.ID}}") ps aux
 
-cat_log_webserv:
+cat_log_webserv cat:
 	@docker exec -it $$(docker ps --filter name=webserv --format "{{.ID}}") cat log
 
 kill_webserv:
@@ -89,4 +89,4 @@ fclean: clean
 
 re: clean all
 
-.PHONY: all ps start stop down build_run build run_d run_it it_webserv ps_webserv cat_log_webserv kill_webserv clean re
+.PHONY: all ps start stop down build_run build run_d run_it it_webserv ps_webserv cat_log_webserv cat kill_webserv clean re

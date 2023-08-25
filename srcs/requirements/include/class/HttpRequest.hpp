@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 13:55:10 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/23 16:31:08 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/25 11:57:20 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 struct request_line
 {
-	HttpMethod	method;
+	http_method	method;
 	std::string	uri;
 	std::string	version;
 };
@@ -43,7 +43,12 @@ class HttpRequest
 {
 	public:
 
-		void	clear(void)
+		HttpRequest(void)
+		{
+			content_length = -1;
+		}
+		
+		void			clear(void)
 		{
 			data.clear();
 			s_request_line.clear();
@@ -55,10 +60,7 @@ class HttpRequest
 			rl.version.clear();
 		};
 
-		void	parsing(void)
-		{
-			
-		};
+		int				parsing(void);
 
 		std::string		data;
 
@@ -67,9 +69,13 @@ class HttpRequest
 		std::string		s_header;
 		std::string		s_body;
 
+		int				content_length;
+
 	protected:
 
 	private:
+
+		int	_lexer(void);
 
 };
 
