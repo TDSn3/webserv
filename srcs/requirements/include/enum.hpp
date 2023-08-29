@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 15:49:59 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/25 15:51:22 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/29 10:48:23 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,12 @@ enum rule
 	LWS			= CR | LF | SP | HT,	// espaces blanches linéaires (Linear White Space)
 	TEXT		= OCTET & ~CTL,
 	SEPARATOR	= SPECIAL | SP | HT,
-	TOKEN		= CHAR & ~CTL & ~SEPARATOR
+	TOKEN		= CHAR & ~CTL & ~SEPARATOR,
+	COMMENT,							// = '(' *( CTEXT | QUOTED_PAIR | COMMENT ) ')'	// texte et parenthèses qui l'entourent dans un champ nommé "comment"
+	CTEXT,								// = <tout TEXT excepté '(' et ')'>
+	QUOTED_STR,							// = ( <"> *(QDTEXT | QUOTED_PAIR ) <"> )		// une str est analysée comme un seul mot si elle est entre guillemets
+	QDTEXT,								// = <tout TEXT excepté <">>
+	QUOTED_PAIR							// = "\" CHAR									// seulement dans une chaîne entre guillemets et dans un commentaire
 };
 
 

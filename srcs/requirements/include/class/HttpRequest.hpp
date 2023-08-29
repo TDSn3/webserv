@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 13:55:10 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/25 11:57:20 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/29 12:19:31 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,18 @@
 # define HTTPREQUEST_HPP
 
 # include <iostream>
+# include <map>
 
 # include "../enum.hpp"
 
-struct request_line
+struct s_request_line
 {
+	bool		status;
 	http_method	method;
 	std::string	uri;
 	std::string	version;
+	int			major_version;
+	int			minor_version;
 };
 
 /* ************************************************************************** */
@@ -51,31 +55,33 @@ class HttpRequest
 		void			clear(void)
 		{
 			data.clear();
-			s_request_line.clear();
-			s_header.clear();
-			s_body.clear();
+			str_request_line.clear();
+			str_header.clear();
+			str_body.clear();
 			
-			rl.method = EMPTY;
-			rl.uri.clear();
-			rl.version.clear();
+			request_line.status = false;
+			request_line.method = EMPTY;
+			request_line.uri.clear();
+			request_line.version.clear();
+			request_line.major_version = 0;
+			request_line.minor_version = 0;
 		};
 
-		int				parsing(void);
+		int									parsing(void);
 
-		std::string		data;
-
-		std::string		s_request_line;
-		request_line	rl;
-		std::string		s_header;
-		std::string		s_body;
-
-		int				content_length;
+		std::string							data;
+		std::string							str_request_line;
+		s_request_line						request_line;
+		std::string							str_header;
+		std::map<std::string, std::string>	header;
+		std::string							str_body;
+		int									content_length;
 
 	protected:
 
 	private:
 
-		int	_lexer(void);
+		int									_lexer(void);
 
 };
 

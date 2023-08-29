@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 15:43:46 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/23 16:18:08 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/29 12:18:44 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <iostream>
 
 
-struct status_line
+struct s_status_line
 {
 	std::string	version;
 	int			code;
@@ -25,7 +25,7 @@ struct status_line
 
 /* ************************************************************************** */
 /*                                                                            */
-/*   status_line = HTTP-Version SP* Status-Code SP* Reason-Phrase CRLF* **	  */
+/*   s_status_line = HTTP-Version SP* Status-Code SP* Reason-Phrase CRLF* **	  */
 /*   request_line = GET / HTTP/1.1											  */
 /*                                                                            */
 /*   SP = Space																  */
@@ -45,9 +45,9 @@ class HttpResponse
 		void	clear(void)
 		{
 			data.clear();
-			s_status_line.clear();
-			s_header.clear();
-			s_body.clear();
+			str_status_line.clear();
+			str_header.clear();
+			str_body.clear();
 
 			sl.version.clear();
 			sl.code = 0;
@@ -56,10 +56,10 @@ class HttpResponse
 
 		std::string	data;
 
-		std::string	s_status_line;
-		status_line	sl;
-		std::string	s_header;
-		std::string	s_body;
+		std::string	str_status_line;
+		s_status_line	sl;
+		std::string	str_header;
+		std::string	str_body;
 
 	protected:
 
