@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 13:55:10 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/29 12:19:31 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/29 19:19:33 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,33 +49,62 @@ class HttpRequest
 
 		HttpRequest(void)
 		{
-			content_length = -1;
+			request_line.status = false;
+			request_line.method = EMPTY;
+			request_line.major_version = 0;
+			request_line.minor_version = 0;
+
+			header_status = false;
+
+			content_read = 0;
+			content_length = 0;
+			request_status = false;
 		}
 		
 		void			clear(void)
 		{
 			data.clear();
+
 			str_request_line.clear();
-			str_header.clear();
-			str_body.clear();
-			
 			request_line.status = false;
 			request_line.method = EMPTY;
 			request_line.uri.clear();
 			request_line.version.clear();
 			request_line.major_version = 0;
 			request_line.minor_version = 0;
+
+			str_header.clear();
+			header_status = false;
+			header.clear();
+
+			str_body.clear();
+
+			content_read = 0;
+			content_length = 0;
+			request_status = false;
 		};
 
 		int									parsing(void);
+		void								parse_request_line(void);
+		void								parse_header(void);
+		void								parse_body(void);
+
+
 
 		std::string							data;
+
 		std::string							str_request_line;
 		s_request_line						request_line;
+	
 		std::string							str_header;
+		bool								header_status;
 		std::map<std::string, std::string>	header;
+
 		std::string							str_body;
-		int									content_length;
+
+		size_t								content_read;
+		size_t								content_length;
+		bool								request_status;
 
 	protected:
 

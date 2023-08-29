@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 11:10:13 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/29 14:21:59 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/29 20:25:24 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ static void print_character_type(const unsigned char c);
 // static int check_lws(const char c);
 static void print_rule(const std::string &stock_line);
 static void unfolding(std::string &data);
+static void delete_first_crlf(std::string &data);
 
 int	HttpRequest::parsing(void)
 {		
@@ -27,14 +28,62 @@ int	HttpRequest::parsing(void)
 
 int	HttpRequest::_lexer(void)
 {
+	// std::string			stock_line;
+	// std::istringstream	ss(data);
+	std::string	test("\r\n\r\n\r\n\n\nGET / HTTP/1.1\r\nHost: localhost:8080\r\nSec-Fetch-Site:\r\n \tnone\r\nHost:\r\n\tlocalhost:8080\r\n");
+	
 	print_rule(data);	// !!!
+	delete_first_crlf(data);
 	unfolding(data);
+
+	print_rule(test);	// !!!
+	delete_first_crlf(test);
+	unfolding(test);
+	print_rule(test);	// !!!
+
+	for(size_t i = 0; data[i]; i++)
+	{
+		if (!request_line.status)
+		{
+			str_request_line += data[i];
+			parse_request_line();
+		}
+		else if(!header_status)
+		{
+			str_header += data[i];
+		}
+		else
+		{
+			str_body += data[i];
+		}
+	}
 
 	return (0);
 }
 
+void		HttpRequest::parse_request_line(void)
+{
+	int	arg_count;
 
-/* **********************************m**************************************** */
+	arg_count = 0;
+	for(size_t i = 0; str_request_line[i]; i++)
+	{
+		if (get_character_type(str_request_line[i]) == SP)
+			arg_count++;
+	}
+}
+
+void		HttpRequest::parse_header(void)
+{
+	
+}
+
+void		HttpRequest::parse_body(void)
+{
+	
+}
+
+/* ************************************************************************** */
 /*                                                                            */
 /*   SP Espaces, HT tabulations, LF sauts de ligne et CR retours chariot	  */
 /*   peuvent être remplacé par un seul SP espaces pour le parsing.			  */
@@ -96,7 +145,7 @@ static void	print_character_type(const unsigned char c)
 // static int	check_lws(const char c)
 // {
 // 	rule	character_type;
-	
+//
 // 	character_type = get_character_type(c);
 // 	if (character_type != CR && character_type != LF && character_type != SP && character_type != HT)
 // 		return 1;
@@ -147,4 +196,12 @@ static void	unfolding(std::string &data)
 		}
 		++it;
 	}
+}
+
+static void delete_first_crlf(std::string &data)
+{
+	std::string :: iterator	it = data.begin();
+
+	while (it != data.end() && (get_character_type(*it) == CR || get_character_type(*it) == LF) )
+		it = data.erase(it, it + 1);
 }
