@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 11:10:13 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/29 20:25:24 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/30 08:52:27 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,39 +41,50 @@ int	HttpRequest::_lexer(void)
 	unfolding(test);
 	print_rule(test);	// !!!
 
+	_line_fill_up_to_lf();
+
+	std::cout << COLOR_BOLD_RED		<< "str_request_line :\n"	<< COLOR_RESET << COLOR_RED		<< str_request_line	<< COLOR_RESET << std::endl;
+	std::cout << COLOR_BOLD_BLUE	<< "str_header :\n"			<< COLOR_RESET << COLOR_BLUE	<< str_header		<< COLOR_RESET << std::endl;
+	std::cout << COLOR_BOLD_YELLOW	<< "str_body :\n"			<< COLOR_RESET << COLOR_YELLOW	<< str_body			<< COLOR_RESET << std::endl;
+
+	return (0);
+}
+
+void		HttpRequest::_line_fill_up_to_lf(void)
+{
 	for(size_t i = 0; data[i]; i++)
 	{
 		if (!request_line.status)
 		{
 			str_request_line += data[i];
-			parse_request_line();
+			if (get_character_type(data[i]) == LF)
+				request_line.status = true;
 		}
 		else if(!header_status)
 		{
 			str_header += data[i];
+			if (get_character_type(data[i]) == LF
+				&& data[i + 1] && get_character_type(data[i + 1]) == CR
+				&& data[i + 2] && get_character_type(data[i + 2]) == LF)
+			{
+				str_header += "\r\n";
+				i += 2;
+				header_status = true;
+			}
 		}
 		else
 		{
 			str_body += data[i];
 		}
 	}
-
-	return (0);
 }
 
-void		HttpRequest::parse_request_line(void)
+void		HttpRequest::request_line_fill_up_to_lf(void)
 {
-	int	arg_count;
-
-	arg_count = 0;
-	for(size_t i = 0; str_request_line[i]; i++)
-	{
-		if (get_character_type(str_request_line[i]) == SP)
-			arg_count++;
-	}
+	
 }
 
-void		HttpRequest::parse_header(void)
+void		HttpRequest::header_fill_up_to_lf(void)
 {
 	
 }
