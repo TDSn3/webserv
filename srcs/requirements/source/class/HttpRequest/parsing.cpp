@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 11:10:13 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/30 08:52:27 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/30 11:26:39 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static void print_character_type(const unsigned char c);
 static void print_rule(const std::string &stock_line);
 static void unfolding(std::string &data);
 static void delete_first_crlf(std::string &data);
+static http_method get_http_method(const std::string str);
 
 int	HttpRequest::parsing(void)
 {		
@@ -28,29 +29,37 @@ int	HttpRequest::parsing(void)
 
 int	HttpRequest::_lexer(void)
 {
-	// std::string			stock_line;
-	// std::istringstream	ss(data);
-	std::string	test("\r\n\r\n\r\n\n\nGET / HTTP/1.1\r\nHost: localhost:8080\r\nSec-Fetch-Site:\r\n \tnone\r\nHost:\r\n\tlocalhost:8080\r\n");
-	
+	std::string	test("\r\n\r\n\r\n\n\nGET / HTTP/1.1\r\nHost:                   localhost:8080\r\nSec-Fetch-Site:\r\n \tnone\r\nHost:\r\n\tlocalhost:8080\r\n");
+
 	print_rule(data);	// !!!
 	delete_first_crlf(data);
 	unfolding(data);
 
-	print_rule(test);	// !!!
-	delete_first_crlf(test);
-	unfolding(test);
-	print_rule(test);	// !!!
+	_fill_up_to_lf();
 
-	_line_fill_up_to_lf();
+	_parse_request_line();
+	_parse_header();
 
+	std::cout << COLOR_DIM_RED		<< "request_line = "		<< request_line.status								<< COLOR_RESET << std::endl;
+	std::cout << COLOR_DIM_BLUE		<< "header = "				<< header_status									<< COLOR_RESET << std::endl;
+	std::cout << COLOR_DIM_YELLOW	<< "body = "				<< content_read			<< " / " << content_length	<< COLOR_RESET << std::endl;
+	
 	std::cout << COLOR_BOLD_RED		<< "str_request_line :\n"	<< COLOR_RESET << COLOR_RED		<< str_request_line	<< COLOR_RESET << std::endl;
 	std::cout << COLOR_BOLD_BLUE	<< "str_header :\n"			<< COLOR_RESET << COLOR_BLUE	<< str_header		<< COLOR_RESET << std::endl;
 	std::cout << COLOR_BOLD_YELLOW	<< "str_body :\n"			<< COLOR_RESET << COLOR_YELLOW	<< str_body			<< COLOR_RESET << std::endl;
 
+	std::cout << COLOR_BOLD_RED		<< "method : "				<< COLOR_RESET << COLOR_RED		<< request_line.method	<< COLOR_RESET << std::endl;
+	std::cout << COLOR_BOLD_RED		<< "uri : "					<< COLOR_RESET << COLOR_RED		<< request_line.uri		<< COLOR_RESET << std::endl;
+	std::cout << COLOR_BOLD_RED		<< "version : "				<< COLOR_RESET << COLOR_RED		<< request_line.version	<< COLOR_RESET << std::endl;
+
+	for (std::map<std::string, std::string>::iterator it = header.begin(); it != header.end(); it++)
+		std::cout << COLOR_BOLD_BLUE	<< "Nom de champ : " 		<< COLOR_RESET << COLOR_BLUE	<< it->first	<< COLOR_RESET
+				  << COLOR_BOLD_BLUE	<< ", Valeur de champ : "	<< COLOR_RESET << COLOR_BLUE	<< it->second	<< COLOR_RESET << std::endl;
+
 	return (0);
 }
 
-void		HttpRequest::_line_fill_up_to_lf(void)
+void		HttpRequest::_fill_up_to_lf(void)
 {
 	for(size_t i = 0; data[i]; i++)
 	{
@@ -67,7 +76,6 @@ void		HttpRequest::_line_fill_up_to_lf(void)
 				&& data[i + 1] && get_character_type(data[i + 1]) == CR
 				&& data[i + 2] && get_character_type(data[i + 2]) == LF)
 			{
-				str_header += "\r\n";
 				i += 2;
 				header_status = true;
 			}
@@ -79,19 +87,62 @@ void		HttpRequest::_line_fill_up_to_lf(void)
 	}
 }
 
-void		HttpRequest::request_line_fill_up_to_lf(void)
+void		HttpRequest::_parse_request_line(void)
 {
-	
+	std::string			stock_line;
+	std::istringstream	ss(str_request_line);
+	char				i;
+
+	i = 0;
+	while(std::getline(ss, stock_line, ' ') && i < 127)
+	{
+		if (i == 0)
+			request_line.method = get_http_method(stock_line);
+		else if (i == 1)
+			request_line.uri = stock_line;
+		else if (i == 2)
+			request_line.version = stock_line;
+		i++;
+	}
+	if (i != 3)
+		throw (std::exception() );	// !!! a gérer plus tard !!!	// nombre d'espace SP incorrect
 }
 
-void		HttpRequest::header_fill_up_to_lf(void)
+void		HttpRequest::_parse_header(void)
 {
-	
-}
+	std::string			stock_line;
+	std::istringstream	ss(str_header);
+	size_t				i;
+	char				j;
 
-void		HttpRequest::parse_body(void)
-{
-	
+	while(std::getline(ss, stock_line) )
+	{
+		std::string			field_name;		// nom de champ		// <nom de champ>: <valeur de champ>	//  <nom de champ> ':' *LWS <valeur de champ>
+		std::string			field_value;	// valeur de champ	//
+
+		i = 0;
+		j = 0;
+		while(stock_line[i])
+		{		
+			if (stock_line[i] == ':' && j == 0)
+			{
+				i++;
+				while (stock_line[i] && get_character_type(stock_line[i] ) & LWS)
+					i++;
+				j++;
+				continue ;
+			}
+			if (j == 0)
+				field_name += stock_line[i];
+			else if (j == 1)
+				field_value += stock_line[i];
+			i++;
+		}
+		while (!field_value.empty() && get_character_type(field_value[field_value.size() - 1] ) & LWS)
+			field_value.erase(field_value.size() - 1);
+		if (!field_name.empty() )
+			header[field_name] += field_value;
+	}
 }
 
 /* ************************************************************************** */
@@ -127,6 +178,17 @@ static rule	get_character_type(const char c)
 	return OCTET; // Tout autre octet
 }
 
+static http_method	get_http_method(const std::string str)
+{
+	if (str == "EMPTY")
+		return EMPTY;
+	if (str == "GET")
+		return GET;
+	if (str == "POST")
+		return POST;
+	return EMPTY;
+}
+
 static void	print_character_type(const unsigned char c)
 {
 	if (c == 13)
@@ -156,7 +218,7 @@ static void	print_character_type(const unsigned char c)
 // static int	check_lws(const char c)
 // {
 // 	rule	character_type;
-//
+
 // 	character_type = get_character_type(c);
 // 	if (character_type != CR && character_type != LF && character_type != SP && character_type != HT)
 // 		return 1;

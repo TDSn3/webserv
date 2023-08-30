@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 13:55:10 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/30 08:52:08 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/30 11:26:24 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,10 +84,7 @@ class HttpRequest
 			request_status = false;
 		};
 
-		int									parsing(void);
-		void								request_line_fill_up_to_lf(void);
-		void								header_fill_up_to_lf(void);
-		void								parse_body(void);
+		int									parsing(void);	// ! throw possible // !!! a gérer plus tard !!!
 
 
 
@@ -101,9 +98,9 @@ class HttpRequest
 		std::map<std::string, std::string>	header;
 
 		std::string							str_body;
-
 		size_t								content_read;
 		size_t								content_length;
+
 		bool								request_status;
 
 	protected:
@@ -111,7 +108,9 @@ class HttpRequest
 	private:
 
 		int									_lexer(void);
-		void								_line_fill_up_to_lf(void);
+		void								_fill_up_to_lf(void);
+		void								_parse_request_line(void);
+		void								_parse_header(void);
 
 };
 
