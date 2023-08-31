@@ -6,16 +6,16 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 11:10:13 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/30 11:26:39 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/31 11:01:05 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <header.hpp>
 
 static rule get_character_type(const char c);
-static void print_character_type(const unsigned char c);
+//static void print_character_type(const unsigned char c);
 // static int check_lws(const char c);
-static void print_rule(const std::string &stock_line);
+//static void print_rule(const std::string &stock_line);
 static void unfolding(std::string &data);
 static void delete_first_crlf(std::string &data);
 static http_method get_http_method(const std::string str);
@@ -31,14 +31,16 @@ int	HttpRequest::_lexer(void)
 {
 	std::string	test("\r\n\r\n\r\n\n\nGET / HTTP/1.1\r\nHost:                   localhost:8080\r\nSec-Fetch-Site:\r\n \tnone\r\nHost:\r\n\tlocalhost:8080\r\n");
 
-	print_rule(data);	// !!!
+	//print_rule(data);	// !!!
 	delete_first_crlf(data);
 	unfolding(data);
 
 	_fill_up_to_lf();
 
-	_parse_request_line();
-	_parse_header();
+	if (request_line.status)
+		_parse_request_line();
+	if (header_status)
+		_parse_header();
 
 	std::cout << COLOR_DIM_RED		<< "request_line = "		<< request_line.status								<< COLOR_RESET << std::endl;
 	std::cout << COLOR_DIM_BLUE		<< "header = "				<< header_status									<< COLOR_RESET << std::endl;
@@ -61,7 +63,7 @@ int	HttpRequest::_lexer(void)
 
 void		HttpRequest::_fill_up_to_lf(void)
 {
-	for(size_t i = 0; data[i]; i++)
+	for(size_t i = 0; data[i] && request_status == false ; i++)
 	{
 		if (!request_line.status)
 		{
@@ -71,13 +73,21 @@ void		HttpRequest::_fill_up_to_lf(void)
 		}
 		else if(!header_status)
 		{
+			if ( (get_character_type(data[i]) == CR
+				&& data[i + 1] && get_character_type(data[i + 2]) == LF && !data[i + 3] ) || (get_character_type(data[i]) == LF && !data[i + 1] ) )	// no header
+			{
+				request_status = true;
+			}
+
 			str_header += data[i];
+			
 			if (get_character_type(data[i]) == LF
 				&& data[i + 1] && get_character_type(data[i + 1]) == CR
 				&& data[i + 2] && get_character_type(data[i + 2]) == LF)
 			{
 				i += 2;
 				header_status = true;
+				request_status = true;	// !!! a gérer plus tard !!!	// deplacer cette ligne apres verification du body
 			}
 		}
 		else
@@ -101,7 +111,11 @@ void		HttpRequest::_parse_request_line(void)
 		else if (i == 1)
 			request_line.uri = stock_line;
 		else if (i == 2)
+		{
+			while (!stock_line.empty() && get_character_type(stock_line[stock_line.size() - 1] ) & LWS)
+				stock_line.erase(stock_line.size() - 1);
 			request_line.version = stock_line;
+		}
 		i++;
 	}
 	if (i != 3)
@@ -189,31 +203,31 @@ static http_method	get_http_method(const std::string str)
 	return EMPTY;
 }
 
-static void	print_character_type(const unsigned char c)
-{
-	if (c == 13)
-		std::cout << COLOR_CYAN			<< "CR"			<< COLOR_RESET;
-	else if (c == 10)
-		std::cout << COLOR_BOLD_CYAN	<< "LF"			<< COLOR_RESET;
-	else if (c == 32)
-		std::cout << COLOR_BOLD_GREEN	<< "SP"			<< COLOR_RESET;
-	else if (c == 9)
-		std::cout << COLOR_CYAN			<< "HT"			<< COLOR_RESET;
-	else if (c == 34)
-		std::cout << COLOR_MAGENTA		<< "QUOTE"		<< COLOR_RESET;
-	else if (c >= 'A' && c <= 'Z')
-		std::cout << COLOR_YELLOW		<< "UPALPHA"	<< COLOR_RESET;
-	else if (c >= 'a' && c <= 'z')
-		std::cout << COLOR_YELLOW		<< "LOALPHA"	<< COLOR_RESET;
-	else if (c >= '0' && c <= '9')
-		std::cout << COLOR_BLUE			<< "DIGIT"		<< COLOR_RESET;
-	else if (c < 32 || c == 127)
-		std::cout << COLOR_BOLD_RED		<< "CTL"		<< COLOR_RESET;
-	else if (c < 128)
-		std::cout << "CHAR";
-	else
-		std::cout << COLOR_BOLD_RED		<< "OCTET"		<< COLOR_RESET;
-}
+//static void	print_character_type(const unsigned char c)
+//{
+//	if (c == 13)
+//		std::cout << COLOR_CYAN			<< "CR"			<< COLOR_RESET;
+//	else if (c == 10)
+//		std::cout << COLOR_BOLD_CYAN	<< "LF"			<< COLOR_RESET;
+//	else if (c == 32)
+//		std::cout << COLOR_BOLD_GREEN	<< "SP"			<< COLOR_RESET;
+//	else if (c == 9)
+//		std::cout << COLOR_CYAN			<< "HT"			<< COLOR_RESET;
+//	else if (c == 34)
+//		std::cout << COLOR_MAGENTA		<< "QUOTE"		<< COLOR_RESET;
+//	else if (c >= 'A' && c <= 'Z')
+//		std::cout << COLOR_YELLOW		<< "UPALPHA"	<< COLOR_RESET;
+//	else if (c >= 'a' && c <= 'z')
+//		std::cout << COLOR_YELLOW		<< "LOALPHA"	<< COLOR_RESET;
+//	else if (c >= '0' && c <= '9')
+//		std::cout << COLOR_BLUE			<< "DIGIT"		<< COLOR_RESET;
+//	else if (c < 32 || c == 127)
+//		std::cout << COLOR_BOLD_RED		<< "CTL"		<< COLOR_RESET;
+//	else if (c < 128)
+//		std::cout << "CHAR";
+//	else
+//		std::cout << COLOR_BOLD_RED		<< "OCTET"		<< COLOR_RESET;
+//}
 
 // static int	check_lws(const char c)
 // {
@@ -225,24 +239,24 @@ static void	print_character_type(const unsigned char c)
 // 	return 0;
 // }
 
-static void	print_rule(const std::string &data)
-{
-	std::istringstream	ss(data);
-	std::string			stock_line;
+//static void	print_rule(const std::string &data)
+//{
+//	std::istringstream	ss(data);
+//	std::string			stock_line;
 
-	std::cout<< COLOR_RED << "LEXER" << COLOR_RESET << std::endl;
-	while (std::getline(ss, stock_line) )
-	{
-		std::cout << COLOR_BOLD << stock_line << COLOR_RESET << std::endl;
-		for (size_t i = 0; stock_line[i]; i++)
-		{
-			print_character_type(static_cast<unsigned char>(stock_line[i] ) );
-			std::cout << " ";
-		}
-		std::cout << COLOR_BOLD_CYAN << "LF\n" << COLOR_RESET;	
-	}
-	std::cout << COLOR_RED << "----" << COLOR_RESET << std::endl;
-}
+//	std::cout<< COLOR_RED << "LEXER" << COLOR_RESET << std::endl;
+//	while (std::getline(ss, stock_line) )
+//	{
+//		std::cout << COLOR_BOLD << stock_line << COLOR_RESET << std::endl;
+//		for (size_t i = 0; stock_line[i]; i++)
+//		{
+//			print_character_type(static_cast<unsigned char>(stock_line[i] ) );
+//			std::cout << " ";
+//		}
+//		std::cout << COLOR_BOLD_CYAN << "LF\n" << COLOR_RESET;	
+//	}
+//	std::cout << COLOR_RED << "----" << COLOR_RESET << std::endl;
+//}
 
 /* ************************************************************************** */
 /*                                                                            */

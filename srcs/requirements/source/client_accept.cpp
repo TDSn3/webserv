@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 14:22:45 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/25 11:08:54 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/31 11:04:54 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,7 @@ void	client_accept(Server &server)
 
 static void	clients_poll_struct_check(Server &server)
 {
-	std::string						hello("HTTP/1.1 200 OK\nContent-Type: text/plain\nContent-Length: 12\n\nHello world!");
-	std::vector<Client> :: iterator it = server.clients.begin();
+	std::vector<Client> :: iterator	it = server.clients.begin();
 
 	while (it != server.clients.end() )
 	{
@@ -64,28 +63,14 @@ static void	clients_poll_struct_check(Server &server)
 			if (ret > 0)
 			{
 				it->request.data += it->buffer;
-				if (ret < BUFFER_CLIENT_SIZE)
-				{
-					std::cout << COLOR_BOLD_RED << "BUFFER : " << ret << " / " << BUFFER_CLIENT_SIZE << COLOR_RESET << std::endl;
 
-					std::cout << "[" << COLOR_BOLD << it->ipv4 << COLOR_BLUE << ":" << it->port << COLOR_RESET << "]\n" << it->request.data << std::endl;
+				std::cout << COLOR_BOLD_RED << "BUFFER : " << ret << " / " << BUFFER_CLIENT_SIZE << COLOR_RESET << std::endl;
+				std::cout << "[" << COLOR_BOLD << it->ipv4 << COLOR_BLUE << ":" << it->port << COLOR_RESET << "]\n" << it->request.data << std::endl;
 
-					it->request.parsing();
-					it->request.clear();
-
-					write(it->communication_fd , hello.c_str() , hello.size() );
-				}
-				else
-				{
-					std::cout << COLOR_BOLD_RED << "BUFFER FULL : " << ret << " / " << BUFFER_CLIENT_SIZE << COLOR_RESET << std::endl;
-
-					if(it->request.parsing() )	// la requête se termine à la fin du buffer
-					{
-						it->request.clear();
-
-						write(it->communication_fd , hello.c_str() , hello.size() );
-					}
-				}
+				it->request.parsing();
+				if (it->request.request_status == true)
+					it->response.build(it->request);
+				it->request.clear();
 			}
 			else								// la connexion a été fermée par le client
 			{
@@ -94,6 +79,13 @@ static void	clients_poll_struct_check(Server &server)
 				it = server.clients.erase(it);	// supprime le Client de std::vector stockée dans Server
 				continue ;
 			}
+		}
+		if (server.poll_struct[ it->index_vector_poll_struct ].revents & POLLOUT && it->response.status() == true)
+		{
+			std::cout << "\n[" << COLOR_BOLD << "RESPONSE" << COLOR_RESET << "]\n" << it->response.str_response << std::endl;
+			std::cout << "[" << COLOR_BOLD << "END OF RESPONSE" << COLOR_RESET << "]" << std::endl;
+			write(it->communication_fd , it->response.str_response.c_str() , it->response.str_response.size() );
+			it->response.clear();
 		}
 		it++;
 	}

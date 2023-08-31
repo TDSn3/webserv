@@ -1,40 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   _make_response.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/11 15:58:01 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/31 08:02:15 by tda-silv         ###   ########.fr       */
+/*   Created: 2023/08/31 09:52:55 by tda-silv          #+#    #+#             */
+/*   Updated: 2023/08/31 10:09:32 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <header.hpp>
 
-volatile sig_atomic_t	siginit_status = 0;
-
-int	main(int argc, char **argv)
+void	HttpResponse::_make_response(void)
 {
-	(void) argc;
-	(void) argv;
+	std::ostringstream	oss;
 
-	signal(SIGINT, handler);
+	oss << status_line.code;
 
-	//LogFile		log_file;
+	str_response += status_line.version;
+	str_response += " ";
+	str_response += oss.str();
+	str_response += " ";
+	str_response += status_line.reason_phrase;
+	str_response += "\r\n";
 
-	try
-	{
-		Server	server(8080);
+	str_response += "Content-Type: text/plain\r\n";
+	str_response += "Content-Length: 12\r\n";
+	str_response += "\r\n";
 
-		std::cout << "\nLe serveur démarre sur le port " << COLOR_BOLD_BLUE << server.port << COLOR_RESET << std::endl;
-
-		client_accept(server);
-	}
-	catch(const std::exception &e)
-	{
-		return (1);
-	}
-
-	return (0);
+	str_response += "Hello world!";
 }

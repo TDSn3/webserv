@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 15:43:46 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/29 12:18:44 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/31 10:46:11 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <iostream>
 
+class HttpRequest;
 
 struct s_status_line
 {
@@ -25,8 +26,8 @@ struct s_status_line
 
 /* ************************************************************************** */
 /*                                                                            */
-/*   s_status_line = HTTP-Version SP* Status-Code SP* Reason-Phrase CRLF* **	  */
-/*   request_line = GET / HTTP/1.1											  */
+/*   status_line = HTTP-Version SP* Status-Code SP* Reason-Phrase CRLF* **    */
+/*   status_line = HTTP/1.1 200 OK											  */
 /*                                                                            */
 /*   SP = Space																  */
 /*   CR = Carriage Return (retour chariot)									  */
@@ -42,28 +43,48 @@ class HttpResponse
 {
 	public:
 
+		void	build(HttpRequest &request)
+		{
+			status_line.version = request.request_line.version;
+			status_line.code = 200;
+			status_line.reason_phrase = "OK";
+
+			_make_response();
+		};
+
+		bool	status(void)
+		{
+			if (str_response.empty() )
+				return (false);	// vide
+			return (true);		// remplie
+		};
+
 		void	clear(void)
 		{
 			data.clear();
-			str_status_line.clear();
 			str_header.clear();
 			str_body.clear();
 
-			sl.version.clear();
-			sl.code = 0;
-			sl.reason_phrase.clear();
+			status_line.version.clear();
+			status_line.code = 0;
+			status_line.reason_phrase.clear();
+
+			str_response.clear();
 		};
 
-		std::string	data;
+		std::string		data;
 
-		std::string	str_status_line;
-		s_status_line	sl;
-		std::string	str_header;
-		std::string	str_body;
+		s_status_line	status_line;
+		std::string		str_header;
+		std::string		str_body;
+
+		std::string		str_response;
 
 	protected:
 
 	private:
+
+		void			_make_response(void);
 
 };
 

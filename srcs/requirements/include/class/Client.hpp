@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 08:57:10 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/25 10:00:34 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/31 10:38:31 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <sstream>
 
 # include "HttpRequest.hpp"
+# include "HttpResponse.hpp"
 
 # define BUFFER_CLIENT_SIZE 4096
 
@@ -41,6 +42,7 @@ class Client
 		size_t							index_vector_poll_struct;
 		char							buffer[BUFFER_CLIENT_SIZE];
 		HttpRequest						request;
+		HttpResponse					response;
 
 	protected:
 

@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:58:36 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/23 15:53:28 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/31 10:36:06 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 # include <iostream>
 # include <fstream>
 # include <vector>
+# include <queue>
 
 # include "colors.hpp"
 # include "enum.hpp"
@@ -42,6 +43,7 @@
 # include "class/Client.hpp"
 # include "class/LogFile.hpp"
 # include "class/HttpRequest.hpp"
+# include "class/HttpResponse.hpp"
 
 extern volatile sig_atomic_t	siginit_status;
 

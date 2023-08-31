@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 13:55:10 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/30 11:26:24 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/31 10:41:05 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ class HttpRequest
 			content_read = 0;
 			content_length = 0;
 			request_status = false;
-		}
+		};
 		
 		void			clear(void)
 		{
