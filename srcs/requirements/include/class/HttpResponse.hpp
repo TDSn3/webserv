@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 15:43:46 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/31 10:46:11 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/08/31 11:34:20 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ class HttpResponse
 			status_line.code = 200;
 			status_line.reason_phrase = "OK";
 
-			_make_response();
+			_make_response(request);
 		};
 
 		bool	status(void)
@@ -84,7 +84,8 @@ class HttpResponse
 
 	private:
 
-		void			_make_response(void);
+		std::string		_read_file_in_str(std::string path);
+		void			_make_response(HttpRequest &request);
 
 };
 
