@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 11:12:26 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/31 12:17:29 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/01 16:38:56 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ std::string	HttpResponse::_read_file_in_str(std::string path)
 	file.open(new_path.c_str() );
 	if (!file.good() || !file.is_open() )
 	{
-		std::cerr << "Error: could not open file." << std::endl;	// !!! a gérer plus tard !!!	// gestion erreur avec la reponse
+		std::cerr << "Error: could not open file." << std::endl;	// TODO: gestion erreur avec la reponse
 		file.close();
 
 		return (str);

@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 11:10:13 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/01 13:31:58 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/01 16:39:49 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void		HttpRequest::_fill_up_to_lf(void)
 			{
 				i += 2;
 				header_status = true;
-				request_status = true;	// !!! a gérer plus tard !!!	// deplacer cette ligne apres verification du body
+				request_status = true;	// TODO: deplacer cette ligne apres verification du body
 			}
 		}
 		else
@@ -119,7 +119,7 @@ void		HttpRequest::_parse_request_line(void)
 		i++;
 	}
 	if (i != 3)
-		throw (std::exception() );	// !!! a gérer plus tard !!!	// nombre d'espace SP incorrect
+		throw (std::exception() );	// TODO: !!! a gérer plus tard !!!	// nombre d'espace SP incorrect
 }
 
 void		HttpRequest::_parse_header(void)

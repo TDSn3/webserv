@@ -3,11 +3,7 @@ Create a basic HTTP server from scratch in C++.
 
 ## Usage
 
-Creates and starts two containers. One with webserv connected to port `8080` and another for testing purposes with Nginx connected to port `8181` :
-``` bash
-make
-```
-
+- ` make ` : Creates and starts two containers. One with webserv connected to port `8080` and another for testing purposes with Nginx connected to port `8181`.
 - ` make cat_log_webserv ` : Displays webserv log file. It lists every connection and **HTTP** request received.
 - ` make ps ` :  View images, running containers, and volumes.
 - ` make it_webserv ` :  Enters the webserv container in interactive mode.

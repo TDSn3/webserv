@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 15:43:46 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/31 11:34:20 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/01 19:22:23 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ class HttpResponse
 
 		std::string		_read_file_in_str(std::string path);
 		void			_make_response(HttpRequest &request);
+		void			_give_content_type(HttpRequest &request);
 
 };
 
