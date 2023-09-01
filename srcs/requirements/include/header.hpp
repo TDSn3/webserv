@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:58:36 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/31 10:36:06 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/01 13:22:08 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@
 # include "class/LogFile.hpp"
 # include "class/HttpRequest.hpp"
 # include "class/HttpResponse.hpp"
+
+# define INDEX_FILE_NAME "card.html"
 
 extern volatile sig_atomic_t	siginit_status;
 

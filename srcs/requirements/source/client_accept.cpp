@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 14:22:45 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/31 11:04:54 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/01 13:45:47 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ static void	clients_poll_struct_check(Server &server)
 		}
 		if (server.poll_struct[ it->index_vector_poll_struct ].revents & POLLOUT && it->response.status() == true)
 		{
-			std::cout << "\n[" << COLOR_BOLD << "RESPONSE" << COLOR_RESET << "]\n" << it->response.str_response << std::endl;
+			std::cout << "[" << COLOR_BOLD << "RESPONSE" << COLOR_RESET << "]\n" << it->response.str_response << std::endl;
 			std::cout << "[" << COLOR_BOLD << "END OF RESPONSE" << COLOR_RESET << "]" << std::endl;
 			write(it->communication_fd , it->response.str_response.c_str() , it->response.str_response.size() );
 			it->response.clear();

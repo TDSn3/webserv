@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 11:10:13 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/31 11:01:05 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/01 13:31:58 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,21 +42,21 @@ int	HttpRequest::_lexer(void)
 	if (header_status)
 		_parse_header();
 
-	std::cout << COLOR_DIM_RED		<< "request_line = "		<< request_line.status								<< COLOR_RESET << std::endl;
-	std::cout << COLOR_DIM_BLUE		<< "header = "				<< header_status									<< COLOR_RESET << std::endl;
-	std::cout << COLOR_DIM_YELLOW	<< "body = "				<< content_read			<< " / " << content_length	<< COLOR_RESET << std::endl;
+	// std::cout << COLOR_DIM_RED		<< "request_line = "		<< request_line.status								<< COLOR_RESET << std::endl;
+	// std::cout << COLOR_DIM_BLUE		<< "header = "				<< header_status									<< COLOR_RESET << std::endl;
+	// std::cout << COLOR_DIM_YELLOW	<< "body = "				<< content_read			<< " / " << content_length	<< COLOR_RESET << std::endl;
 	
-	std::cout << COLOR_BOLD_RED		<< "str_request_line :\n"	<< COLOR_RESET << COLOR_RED		<< str_request_line	<< COLOR_RESET << std::endl;
-	std::cout << COLOR_BOLD_BLUE	<< "str_header :\n"			<< COLOR_RESET << COLOR_BLUE	<< str_header		<< COLOR_RESET << std::endl;
-	std::cout << COLOR_BOLD_YELLOW	<< "str_body :\n"			<< COLOR_RESET << COLOR_YELLOW	<< str_body			<< COLOR_RESET << std::endl;
+	// std::cout << COLOR_BOLD_RED		<< "str_request_line :\n"	<< COLOR_RESET << COLOR_RED		<< str_request_line	<< COLOR_RESET << std::endl;
+	// std::cout << COLOR_BOLD_BLUE	<< "str_header :\n"			<< COLOR_RESET << COLOR_BLUE	<< str_header		<< COLOR_RESET << std::endl;
+	// std::cout << COLOR_BOLD_YELLOW	<< "str_body :\n"			<< COLOR_RESET << COLOR_YELLOW	<< str_body			<< COLOR_RESET << std::endl;
 
-	std::cout << COLOR_BOLD_RED		<< "method : "				<< COLOR_RESET << COLOR_RED		<< request_line.method	<< COLOR_RESET << std::endl;
-	std::cout << COLOR_BOLD_RED		<< "uri : "					<< COLOR_RESET << COLOR_RED		<< request_line.uri		<< COLOR_RESET << std::endl;
-	std::cout << COLOR_BOLD_RED		<< "version : "				<< COLOR_RESET << COLOR_RED		<< request_line.version	<< COLOR_RESET << std::endl;
+	// std::cout << COLOR_BOLD_RED		<< "method : "				<< COLOR_RESET << COLOR_RED		<< request_line.method	<< COLOR_RESET << std::endl;
+	// std::cout << COLOR_BOLD_RED		<< "uri : "					<< COLOR_RESET << COLOR_RED		<< request_line.uri		<< COLOR_RESET << std::endl;
+	// std::cout << COLOR_BOLD_RED		<< "version : "				<< COLOR_RESET << COLOR_RED		<< request_line.version	<< COLOR_RESET << std::endl;
 
-	for (std::map<std::string, std::string>::iterator it = header.begin(); it != header.end(); it++)
-		std::cout << COLOR_BOLD_BLUE	<< "Nom de champ : " 		<< COLOR_RESET << COLOR_BLUE	<< it->first	<< COLOR_RESET
-				  << COLOR_BOLD_BLUE	<< ", Valeur de champ : "	<< COLOR_RESET << COLOR_BLUE	<< it->second	<< COLOR_RESET << std::endl;
+	// for (std::map<std::string, std::string>::iterator it = header.begin(); it != header.end(); it++)
+	// 	std::cout << COLOR_BOLD_BLUE	<< "Nom de champ : " 		<< COLOR_RESET << COLOR_BLUE	<< it->first	<< COLOR_RESET
+	// 			  << COLOR_BOLD_BLUE	<< ", Valeur de champ : "	<< COLOR_RESET << COLOR_BLUE	<< it->second	<< COLOR_RESET << std::endl;
 
 	return (0);
 }

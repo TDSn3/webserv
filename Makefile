@@ -6,7 +6,7 @@
 #    By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/14 16:32:49 by tda-silv          #+#    #+#              #
-#    Updated: 2023/08/25 11:40:47 by tda-silv         ###   ########.fr        #
+#    Updated: 2023/09/01 13:56:47 by tda-silv         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ stop:
 	@docker-compose -f ./srcs/docker-compose.yml stop
 
 down: 
-	@docker-compose -f ./srcs/docker-compose.yml down
+	@docker-compose -f ./srcs/docker-compose.yml down --rmi all --volumes
 
 # **************************************************************************** #
 #                                                                              #
@@ -87,6 +87,6 @@ clean:
 fclean: clean
 	make -C srcs/requirements fclean
 
-re: clean all
+re: down all
 
 .PHONY: all ps start stop down build_run build run_d run_it it_webserv ps_webserv cat_log_webserv cat kill_webserv clean re
