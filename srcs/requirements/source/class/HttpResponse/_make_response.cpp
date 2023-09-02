@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 09:52:55 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/01 20:12:08 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/02 11:41:26 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ static std::string	give_uri_extension_name(std::string uri);
 void	HttpResponse::_make_response(HttpRequest &request)
 {
 	std::ostringstream	oss;
-	std::string			body;
 
 	(void) request;
 
@@ -37,25 +36,23 @@ void	HttpResponse::_make_response(HttpRequest &request)
 	if (request.request_line.method == GET)
 	{
 		if (request.request_line.uri == "/")
-			body = _read_file_in_str(INDEX_FILE_NAME);
+			str_body = _read_file_in_str(INDEX_FILE_NAME);
 		else if (request.request_line.uri == "/favicon.ico")
-			body = _read_file_in_str(FAVICON_FILE_NAME);
+			str_body = _read_file_in_str(FAVICON_FILE_NAME);
 		else
-			body = _read_file_in_str(request.request_line.uri);
+			str_body = _read_file_in_str(request.request_line.uri);
 	}
 
 	oss.str("");
 	oss.clear();
-	oss << body.size();
+	oss << str_body.size();
 
 	str_response += oss.str();
 	str_response += "\r\n";
 
 	str_response += "\r\n";
 
-	str_response += body;
-	
-	//str_response += "Hello world!";
+	str_response += str_body;
 }
 
 void	HttpResponse::_give_content_type(HttpRequest &request)
