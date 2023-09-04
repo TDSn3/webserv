@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:58:01 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/02 07:40:36 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/04 18:30:41 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	main(int argc, char **argv)
 
 	signal(SIGINT, handler);
 
-	//LogFile		log_file;
+	LogFile		log_file;
 
 	try
 	{

@@ -6,7 +6,7 @@
 #    By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/14 16:32:49 by tda-silv          #+#    #+#              #
-#    Updated: 2023/09/01 13:56:47 by tda-silv         ###   ########.fr        #
+#    Updated: 2023/09/04 18:27:00 by tda-silv         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -85,8 +85,13 @@ clean:
 	fi
 
 fclean: clean
-	make -C srcs/requirements fclean
+	@make -C srcs/requirements fclean
+	@make -C client_test fclean
+
+down_other_fclean downfc: down
+	@make -C srcs/requirements fclean
+	@make -C client_test fclean	
 
 re: down all
 
-.PHONY: all ps start stop down build_run build run_d run_it it_webserv ps_webserv cat_log_webserv cat kill_webserv clean re
+.PHONY: all ps start stop down build_run build run_d run_it it_webserv ps_webserv cat_log_webserv cat kill_webserv clean fclean down_other_fclean downfc re
