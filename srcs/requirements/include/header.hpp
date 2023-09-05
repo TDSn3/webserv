@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:58:36 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/05 10:03:56 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/05 16:37:16 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@
 # include <vector>
 # include <queue>
 # include <map>
+# include <exception>
 
 # include "colors.hpp"
 # include "enum.hpp"
@@ -47,6 +48,7 @@
 # include "class/LogFile.hpp"
 # include "class/HttpRequest.hpp"
 # include "class/HttpResponse.hpp"
+# include "class/StatusCode.hpp"
 
 # define INDEX_FILE_NAME "card.html"
 # define FAVICON_FILE_NAME "favicon.png"
@@ -55,5 +57,6 @@ extern volatile sig_atomic_t	siginit_status;
 
 void	client_accept(Server &server);
 void	handler(int sig);
+rule	get_character_type(const char c);
 
 #endif

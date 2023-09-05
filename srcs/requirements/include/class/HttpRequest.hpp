@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 13:55:10 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/05 12:22:52 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/05 16:25:17 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,7 @@ class HttpRequest
 		void								_parse_header(void);
 		void								_parsing_url(void);	// ! throw possible
 		void								_print_parsing_url();
+		void								_check_url_syntax(void);
 
 };
 

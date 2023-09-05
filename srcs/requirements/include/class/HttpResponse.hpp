@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 15:43:46 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/01 19:22:23 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/05 20:56:10 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,30 @@ class HttpResponse
 {
 	public:
 
-		void	build(HttpRequest &request)
+		void	build(HttpRequest &request)	// ! throw possible
 		{
 			status_line.version = request.request_line.version;
 			status_line.code = 200;
 			status_line.reason_phrase = "OK";
 
-			_make_response(request);
+			_make_response(request);		// ! throw possible
+		};
+
+		void	build_error(HttpRequest &request, const int status_code)
+		{
+			std::ostringstream	oss;
+			
+			status_line.version = request.request_line.version;
+			status_line.code = status_code;
+			_make_reason_phrase();
+
+			_add_status_line();
+
+			_add_field_line("Server", "webserv");
+			_add_field_line("Content-Type", "text/html");
+			
+			oss << status_code;
+			_add_body("error_page/" + oss.str() + ".html");
 		};
 
 		bool	status(void)
@@ -87,8 +104,12 @@ class HttpResponse
 		std::string		_read_file_in_str(std::string path);
 		void			_make_response(HttpRequest &request);
 		void			_give_content_type(HttpRequest &request);
+		void			_make_reason_phrase(void);
+		void			_add_status_line(void);
+		void			_add_field_line(std::string field_name, std::string field_value);
+		void			_add_body(HttpRequest &request);
+		void			_add_body(std::string path);
 
 };
 
 #endif
-

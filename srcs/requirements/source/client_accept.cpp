@@ -6,13 +6,14 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 14:22:45 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/04 12:27:08 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/05 20:49:20 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <header.hpp>
 
-static void	clients_poll_struct_check(Server &server);
+static void clients_poll_struct_check(Server &server);
+static void data_received(std::vector<Client> :: iterator &it, ssize_t ret);
 
 void	client_accept(Server &server)
 {
@@ -57,21 +58,11 @@ static void	clients_poll_struct_check(Server &server)
 		{
 			it->buffer_clear();
 			
-			ssize_t					ret;
+			ssize_t	ret;
 
 			ret = recv(it->communication_fd, it->buffer, sizeof(it->buffer), 0);
 			if (ret > 0)
-			{
-				it->request.data += it->buffer;
-
-				std::cout << COLOR_BOLD_RED << "BUFFER : " << ret << " / " << BUFFER_CLIENT_SIZE << COLOR_RESET << std::endl;
-				std::cout << "[" << COLOR_BOLD << it->ipv4 << COLOR_BLUE << ":" << it->port << COLOR_RESET << "]\n" << it->request.data << std::endl;
-
-				it->request.parsing();
-				if (it->request.request_status == true)
-					it->response.build(it->request);
-				it->request.clear();
-			}
+				data_received(it, ret);
 			else								// la connexion a été fermée par le client
 			{
 				std::cout << COLOR_RED << "Déconnexion de [" << it->ipv4 << ":" << it->port << "]" << COLOR_RESET << "\n" << std::endl;
@@ -96,4 +87,41 @@ static void	clients_poll_struct_check(Server &server)
 		}
 		it++;
 	}
+}
+
+static void	data_received(std::vector<Client> :: iterator &it, ssize_t ret)
+{
+	it->request.data += it->buffer;
+
+	std::cout << COLOR_BOLD_RED << "BUFFER : " << ret << " / " << BUFFER_CLIENT_SIZE << COLOR_RESET << std::endl;
+	std::cout << "[" << COLOR_BOLD << it->ipv4 << COLOR_BLUE << ":" << it->port << COLOR_RESET << "]\n" << it->request.data << std::endl;
+
+	try
+	{
+		it->request.parsing();										// ! throw possible 
+	}
+	catch (const StatusCode &e)
+	{
+		std::cout << COLOR_BOLD_RED << "catch: Client::request.parsing()" << COLOR_RESET << std::endl;
+		it->response.clear();
+		it->response.build_error(it->request, e.status_code);		// ! throw possible
+		it->request.clear();
+		return ;
+	}
+	if (it->request.request_status == true)
+	{
+		try
+		{
+			it->response.build(it->request);						// ! throw possible
+		}
+		catch (const StatusCode &e)
+		{
+			std::cout << COLOR_BOLD_RED << "catch: Client::response.build()" << COLOR_RESET << std::endl;
+			it->response.clear();
+			it->response.build_error(it->request, e.status_code);	// ! throw possible
+			it->request.clear();
+			return ;
+		}
+	}
+	it->request.clear();
 }

@@ -6,13 +6,12 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 11:10:13 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/05 12:23:42 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/05 20:54:14 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <header.hpp>
 
-static rule get_character_type(const char c);
 //static void print_character_type(const unsigned char c);
 // static int check_lws(const char c);
 //static void print_rule(const std::string &stock_line);
@@ -20,7 +19,7 @@ static void unfolding(std::string &data);
 static void delete_first_crlf(std::string &data);
 static http_method get_http_method(const std::string str);
 
-int	HttpRequest::parsing(void)
+int	HttpRequest::parsing(void)				// ! throw possible
 {		
 	_lexer();
 
@@ -30,14 +29,14 @@ int	HttpRequest::parsing(void)
 	_fill_up_to_lf();
 
 	if (request_line.status)
-		_parse_request_line();
+		_parse_request_line();				// ! throw possible
 	if (header_status)
 		_parse_header();
 	
 	return (0);
 };
 
-int	HttpRequest::_lexer(void)	// TODO: code lexer
+int	HttpRequest::_lexer(void)				// TODO: code lexer
 {
 	return (0);
 }
@@ -68,7 +67,7 @@ void		HttpRequest::_fill_up_to_lf(void)
 			{
 				i += 2;
 				header_status = true;
-				request_status = true;	// TODO: deplacer cette ligne apres verification du body
+				request_status = true;		// TODO: deplacer cette ligne apres verification du body
 			}
 		}
 		else
@@ -92,8 +91,6 @@ void		HttpRequest::_parse_request_line(void)
 		else if (i == 1)
 		{
 			request_line.uri = stock_line;
-			_parsing_url();			// TODO: !!! a gérer plus tard !!!	// ! throw possible
-			_print_parsing_url();
 		}
 		else if (i == 2)
 		{
@@ -103,8 +100,20 @@ void		HttpRequest::_parse_request_line(void)
 		}
 		i++;
 	}
+
+	try
+	{
+		_parsing_url();				// ! throw possible
+	}
+	catch(const std::exception &e)
+	{
+		throw (StatusCode(400) );
+	}
+	_check_url_syntax();			// ! throw possible
+	_print_parsing_url();
+
 	if (i != 3)
-		throw (std::exception() );	// TODO: !!! a gérer plus tard !!!	// nombre d'espace SP incorrect
+		throw (StatusCode(400) );
 }
 
 void		HttpRequest::_parse_header(void)
@@ -142,39 +151,6 @@ void		HttpRequest::_parse_header(void)
 		if (!field_name.empty() )
 			header[field_name] += field_value;
 	}
-}
-
-/* ************************************************************************** */
-/*                                                                            */
-/*   SP Espaces, HT tabulations, LF sauts de ligne et CR retours chariot	  */
-/*   peuvent être remplacé par un seul SP espaces pour le parsing.			  */
-/*                                                                            */
-/* ************************************************************************** */
-static rule	get_character_type(const char c)
-{
-	unsigned char	u_c = static_cast<unsigned char>(c);
-
-	if (u_c == 13)
-		return CR;
-	if (u_c == 10)
-		return LF;
-	if (u_c == 32)
-		return SP;
-	if (u_c == 9)
-		return HT;
-	if (u_c == 34)
-		return QUOTE;
-	if (u_c >= 'A' && u_c <= 'Z')
-		return UPALPHA;
-	if (u_c >= 'a' && u_c <= 'z')
-		return LOALPHA;
-	if (u_c >= '0' && u_c <= '9')
-		return DIGIT;
-	if (u_c < 32 || u_c == 127)
-		return CTL;
-	if (u_c < 128)
-		return CHAR;
-	return OCTET; // Tout autre octet
 }
 
 static http_method	get_http_method(const std::string str)

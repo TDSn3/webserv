@@ -6,13 +6,13 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 11:12:26 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/01 16:38:56 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/05 20:23:25 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <header.hpp>
 
-std::string	HttpResponse::_read_file_in_str(std::string path)
+std::string	HttpResponse::_read_file_in_str(std::string path)	// ! throw possible
 {
 	std::string			new_path;
 	std::ifstream		file;
@@ -30,7 +30,7 @@ std::string	HttpResponse::_read_file_in_str(std::string path)
 		std::cerr << "Error: could not open file." << std::endl;	// TODO: gestion erreur avec la reponse
 		file.close();
 
-		return (str);
+		throw (StatusCode(404) );	// ! throw possible
 	}
 
     oss << file.rdbuf();

@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 09:52:55 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/02 11:41:26 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/05 20:25:46 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static std::string	give_uri_extension_name(std::string uri);
 
-void	HttpResponse::_make_response(HttpRequest &request)
+void	HttpResponse::_make_response(HttpRequest &request)	// ! throw possible
 {
 	std::ostringstream	oss;
 
@@ -31,28 +31,7 @@ void	HttpResponse::_make_response(HttpRequest &request)
 
 	_give_content_type(request);
 
-	str_response += "Content-Length: ";
-
-	if (request.request_line.method == GET)
-	{
-		if (request.request_line.uri == "/")
-			str_body = _read_file_in_str(INDEX_FILE_NAME);
-		else if (request.request_line.uri == "/favicon.ico")
-			str_body = _read_file_in_str(FAVICON_FILE_NAME);
-		else
-			str_body = _read_file_in_str(request.request_line.uri);
-	}
-
-	oss.str("");
-	oss.clear();
-	oss << str_body.size();
-
-	str_response += oss.str();
-	str_response += "\r\n";
-
-	str_response += "\r\n";
-
-	str_response += str_body;
+	_add_body(request);		// ! throw possible
 }
 
 void	HttpResponse::_give_content_type(HttpRequest &request)
