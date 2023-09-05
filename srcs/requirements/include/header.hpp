@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:58:36 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/01 20:10:19 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/05 10:03:56 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,13 @@
 # include <dirent.h>
 # include <netinet/in.h>
 
+# include <string>
 # include <iostream>
+# include <sstream>
 # include <fstream>
 # include <vector>
 # include <queue>
+# include <map>
 
 # include "colors.hpp"
 # include "enum.hpp"

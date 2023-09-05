@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 13:55:10 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/01 16:39:16 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/05 12:22:52 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,31 @@
 # define HTTPREQUEST_HPP
 
 # include <iostream>
+# include <string>
+# include <sstream>
 # include <map>
 
 # include "../enum.hpp"
 
+struct s_parsed_url
+{
+	std::string							scheme;
+	std::string							domain;
+	std::string							port;
+	std::string							path;
+	std::map<std::string, std::string>	query_parameters;
+	std::string							fragment;
+};
+
 struct s_request_line
 {
-	bool		status;
-	http_method	method;
-	std::string	uri;
-	std::string	version;
-	int			major_version;
-	int			minor_version;
+	bool			status;
+	http_method		method;
+	std::string		uri;
+	s_parsed_url	parsed_url;
+	std::string		version;
+	int				major_version;
+	int				minor_version;
 };
 
 /* ************************************************************************** */
@@ -111,6 +124,8 @@ class HttpRequest
 		void								_fill_up_to_lf(void);
 		void								_parse_request_line(void);
 		void								_parse_header(void);
+		void								_parsing_url(void);	// ! throw possible
+		void								_print_parsing_url();
 
 };
 

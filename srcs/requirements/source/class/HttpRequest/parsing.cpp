@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 11:10:13 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/02 10:49:18 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/05 12:23:42 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,11 @@ void		HttpRequest::_parse_request_line(void)
 		if (i == 0)
 			request_line.method = get_http_method(stock_line);
 		else if (i == 1)
+		{
 			request_line.uri = stock_line;
+			_parsing_url();			// TODO: !!! a gérer plus tard !!!	// ! throw possible
+			_print_parsing_url();
+		}
 		else if (i == 2)
 		{
 			while (!stock_line.empty() && get_character_type(stock_line[stock_line.size() - 1] ) & LWS)

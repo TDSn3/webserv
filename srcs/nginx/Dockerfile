@@ -10,6 +10,7 @@ RUN			apt-get update				\
 					nginx
 
 COPY		./conf/nginx.conf /etc/nginx/conf.d
+COPY		./tools /var/www/html
 
 EXPOSE		8181
 

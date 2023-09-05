@@ -20,7 +20,7 @@ RUN			make re
 
 EXPOSE		8080
 
-CMD			["./webserv"]
+# CMD			["./webserv"]
 #CMD			["valgrind", "./webserv"]
-#CMD			["valgrind", "--tool=memcheck", "--track-origins=yes", "--leak-check=full", "--show-leak-kinds=all", "--track-fds=yes", "./webserv"]
+CMD			["valgrind", "--tool=memcheck", "--track-origins=yes", "--leak-check=full", "--show-leak-kinds=all", "--track-fds=yes", "./webserv"]
 
