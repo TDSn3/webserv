@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:58:36 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/06 11:57:10 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/06 17:31:31 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 # include <netinet/in.h>
 
 # include <string>
+# include <cstring>
 # include <iostream>
 # include <sstream>
 # include <fstream>
@@ -53,13 +54,15 @@
 # define DEFAULT_CONF_FILE "conf/webserv.conf"
 # define INDEX_FILE_NAME "card.html"
 # define FAVICON_FILE_NAME "favicon.png"
+# define ROOT "www"
 
 extern volatile sig_atomic_t	siginit_status;
 
 bool	check_arg(const int argc, const char * const *argv);
 void	my_perror_and_throw(const char *str, const std::exception &e);
+void	my_perror_and_throw(const char *str, const StatusCode &e);
 void	handler(int sig);
-void	client_accept(Server &server);
+void	client_accept(Server &server, char **env);
 rule	get_character_type(const char c);
 
 #endif

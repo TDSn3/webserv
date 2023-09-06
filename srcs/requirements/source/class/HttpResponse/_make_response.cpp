@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 09:52:55 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/05 20:25:46 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/06 17:45:41 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static std::string	give_uri_extension_name(std::string uri);
 
-void	HttpResponse::_make_response(HttpRequest &request)	// ! throw possible
+void	HttpResponse::_make_response(HttpRequest &request, char **env)	// ! throw possible
 {
 	std::ostringstream	oss;
 
@@ -31,12 +31,12 @@ void	HttpResponse::_make_response(HttpRequest &request)	// ! throw possible
 
 	_give_content_type(request);
 
-	_add_body(request);		// ! throw possible
+	_add_body(request, env);		// ! throw possible
 }
 
 void	HttpResponse::_give_content_type(HttpRequest &request)
 {
-	if (request.request_line.method == GET)
+	if (request.request_line.method == GET)	// TODO: gérer POST et DELETE
 	{
 		if (request.request_line.uri == "/")
 		{
@@ -73,13 +73,16 @@ static std::string	give_uri_extension_name(std::string uri)
         return ("");
 	}
 	extension_name = uri.substr(dot_pos + 1);
+	if (extension_name == "cgi")
+		extension_name == "html";
 
 	if (extension_name != "html"
 		|| extension_name != "css"
 		|| extension_name != "javascript"
 		|| extension_name != "js"
 		|| extension_name != "ico"
-		|| extension_name != "png")
+		|| extension_name != "png"
+		|| extension_name != "cgi")
 		return ("");
     return (extension_name);
 }

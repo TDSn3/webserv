@@ -6,16 +6,16 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 14:22:45 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/06 12:38:54 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/06 16:10:03 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <header.hpp>
 
-static void check_clients_poll_struct(Server &server);
-static void data_received(std::vector<Client> :: iterator &it, ssize_t ret);
+static void check_clients_poll_struct(Server &server, char **env);
+static void data_received(std::vector<Client> :: iterator &it, ssize_t ret, char **env);
 
-void	client_accept(Server &server)	// ! throw possible
+void	client_accept(Server &server, char **env)	// ! throw possible
 {
 	std::cout << COLOR_GREEN << "\n+++++++ Waiting for new connection ++++++++\n" << COLOR_RESET << std::endl;
 
@@ -39,13 +39,13 @@ void	client_accept(Server &server)	// ! throw possible
 			}
 		}
 
-		check_clients_poll_struct(server);
+		check_clients_poll_struct(server, env);
 		if (siginit_status)
 			break ;
 	}
 }
 
-static void	check_clients_poll_struct(Server &server)
+static void	check_clients_poll_struct(Server &server, char **env)
 {
 	std::vector<Client> :: iterator	it = server.clients.begin();
 
@@ -59,7 +59,7 @@ static void	check_clients_poll_struct(Server &server)
 
 			ret = recv(it->communication_fd, it->buffer, sizeof(it->buffer), 0);
 			if (ret > 0)
-				data_received(it, ret);
+				data_received(it, ret, env);
 			else								// la connexion a été fermée par le client
 			{
 				std::cout << COLOR_RED << "Déconnexion de [" << it->ipv4 << ":" << it->port << "]" << COLOR_RESET << "\n" << std::endl;
@@ -86,7 +86,7 @@ static void	check_clients_poll_struct(Server &server)
 	}
 }
 
-static void	data_received(std::vector<Client> :: iterator &it, ssize_t ret)
+static void	data_received(std::vector<Client> :: iterator &it, ssize_t ret, char **env)
 {
 	it->request.data += it->buffer;
 
@@ -104,11 +104,12 @@ static void	data_received(std::vector<Client> :: iterator &it, ssize_t ret)
 		it->request.clear();
 		return ;
 	}
+
 	if (it->request.request_status == true)
 	{
 		try
 		{
-			it->response.build(it->request);						// ! throw possible
+			it->response.build(it->request, env);						// ! throw possible
 		}
 		catch (const StatusCode &e)
 		{

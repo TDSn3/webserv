@@ -6,7 +6,7 @@
 #    By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/30 09:01:22 by tda-silv          #+#    #+#              #
-#    Updated: 2023/08/25 10:09:44 by tda-silv         ###   ########.fr        #
+#    Updated: 2023/09/06 18:07:09 by tda-silv         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -75,6 +75,9 @@ re: fclean all
 
 valgrind_memcheck v: $(OBJ)
 	valgrind --tool=memcheck --track-origins=yes --leak-check=full --show-leak-kinds=all --track-fds=yes ./$(NAME)
+
+vv: $(OBJ)
+	valgrind --tool=memcheck --track-origins=yes --leak-check=full --show-leak-kinds=all ./$(NAME)
 
 valgrind_helgrind: $(OBJ)
 	valgrind --tool=helgrind --history-level=full ./$(NAME)

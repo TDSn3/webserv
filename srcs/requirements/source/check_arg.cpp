@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 10:05:59 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/06 10:45:15 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/06 15:23:11 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,14 @@ bool	check_arg(const int argc, const char * const *argv)
 	{
 		if (stat(DEFAULT_CONF_FILE, &buffer) != 0)	// Vérifie si le fichier existe
 			return (my_perror("default configuration file does not exist") );
-		if (access(DEFAULT_CONF_FILE, R_OK) != 0)		// Vérifie si le fichier est accessible en lecture
+		if (access(DEFAULT_CONF_FILE, R_OK) != 0)	// Vérifie si le fichier est accessible en lecture
 			return (my_perror("default configuration file is not readable") );
 	}
 	else			// argc == 2
 	{
-		if (stat(argv[1], &buffer) != 0)	// Vérifie si le fichier existe
+		if (stat(argv[1], &buffer) != 0)
 			return (my_perror("file does not exist") );
-		if (access(argv[1], R_OK) != 0)		// Vérifie si le fichier est accessible en lecture
+		if (access(argv[1], R_OK) != 0)
 			return (my_perror("file is not readable") );
 	}
 

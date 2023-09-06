@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 11:12:26 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/05 20:23:25 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/06 17:40:48 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,15 @@ std::string	HttpResponse::_read_file_in_str(std::string path)	// ! throw possibl
 	std::string			str;
 
 	if (!path.empty() && path[0] == '/')
-		new_path = "www" + path;
+		new_path = std::string(ROOT) + path;
 	else if (!path.empty() && path[0] != '/')
-		new_path = "www/" + path;
+		new_path = std::string(ROOT) + "/" + path;
 
 	file.open(new_path.c_str() );
 	if (!file.good() || !file.is_open() )
 	{
-		std::cerr << "Error: could not open file." << std::endl;	// TODO: gestion erreur avec la reponse
 		file.close();
-
-		throw (StatusCode(404) );	// ! throw possible
+		my_perror_and_throw("Error: could not open file.", StatusCode(404) );
 	}
 
     oss << file.rdbuf();

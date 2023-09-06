@@ -11,7 +11,8 @@ RUN			apt-get update				\
 					gcc					\
 					g++					\
 					make				\
-					valgrind					
+					valgrind			\
+					python3
 
 WORKDIR		/app
 COPY		. /app
