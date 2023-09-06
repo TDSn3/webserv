@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:58:01 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/04 18:30:41 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/06 10:26:38 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ volatile sig_atomic_t	siginit_status = 0;
 
 int	main(int argc, char **argv)
 {
-	(void) argc;
-	(void) argv;
+	if (check_arg(argc, argv) == false)
+		return (1);
 
 	signal(SIGINT, handler);
 
