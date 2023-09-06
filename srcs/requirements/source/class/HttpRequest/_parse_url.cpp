@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _parsing_url.cpp                                   :+:      :+:    :+:   */
+/*   _parse_url.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/05 10:01:53 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/05 13:05:40 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/06 12:36:49 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 /*   fragment	: ancre à une section spécifique de la ressource (facultatif) */
 /*                                                                            */
 /* ************************************************************************** */
-void	HttpRequest::_parsing_url()	// ! throw possible
+void	HttpRequest::_parse_url()	// ! throw possible
 {	
 	s_parsed_url	&parsed = request_line.parsed_url;
 	size_t			pos;
@@ -160,6 +160,7 @@ void	HttpRequest::_print_parsing_url()
 {
 	s_parsed_url	&parsed = request_line.parsed_url;
 
+	std::cout << COLOR_DIM_BLUE;
 	std::cout << "Scheme   : " << parsed.scheme << std::endl;
 	std::cout << "Domain   : " << parsed.domain << std::endl;
 	std::cout << "Port     : " << parsed.port << std::endl;
@@ -169,7 +170,8 @@ void	HttpRequest::_print_parsing_url()
 	{
 		std::cout << "\t" << it->first << ": " << it->second << std::endl;
 	}
-	std::cout << "Fragment : " << parsed.fragment << std::endl;
+	std::cout << "Fragment : " << parsed.fragment;
+	std::cout << COLOR_RESET << "\n\n";
 }
 
 //

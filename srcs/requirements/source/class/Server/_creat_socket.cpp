@@ -24,7 +24,6 @@ void	Server::_creat_socket(void)
 	if (_connexion_fd < 0) 
 	{
 		this->~Server();
-		perror("cannot create socket");
-		throw (std::exception() );
+		my_perror_and_throw("cannot create socket", std::exception() );
 	}
 }

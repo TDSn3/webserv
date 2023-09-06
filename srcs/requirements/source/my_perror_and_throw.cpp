@@ -1,31 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   StatusCode.hpp                                     :+:      :+:    :+:   */
+/*   perror_and_throw.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/05 16:13:31 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/06 11:54:51 by tda-silv         ###   ########.fr       */
+/*   Created: 2023/09/06 11:46:11 by tda-silv          #+#    #+#             */
+/*   Updated: 2023/09/06 11:57:00 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef STATUSCODE_HPP
-# define STATUSCODE_HPP
+#include <header.hpp>
 
-class StatusCode : public std::exception
+void	my_perror_and_throw(const char *str, const std::exception &e)
 {
-	public:
-
-	StatusCode(int code) : status_code(code) {};
-	StatusCode(const StatusCode &src) : status_code(src.status_code) {};
-
-	const int	status_code;
-
-	protected:
-
-	private:
-
-};
-
-#endif
+	std::cerr << COLOR_BOLD_RED << str << COLOR_RESET << std::endl;
+	throw (e);
+}

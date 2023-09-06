@@ -6,16 +6,16 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 14:22:45 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/06 09:40:10 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/06 12:38:54 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <header.hpp>
 
-static void clients_poll_struct_check(Server &server);
+static void check_clients_poll_struct(Server &server);
 static void data_received(std::vector<Client> :: iterator &it, ssize_t ret);
 
-void	client_accept(Server &server)
+void	client_accept(Server &server)	// ! throw possible
 {
 	std::cout << COLOR_GREEN << "\n+++++++ Waiting for new connection ++++++++\n" << COLOR_RESET << std::endl;
 
@@ -23,18 +23,15 @@ void	client_accept(Server &server)
 	{
 		int	ret;
 
-		ret = poll(server.poll_struct.data(), static_cast<nfds_t>(server.poll_struct.size() ), 0);
+		ret = poll(server.poll_struct.data(), static_cast<nfds_t>(server.poll_struct.size() ), 0);	// poll() vérifie l'état de chaque socket
 		if (ret == -1)
-		{
-			perror("poll");
-			throw (std::exception() );
-		}
+			my_perror_and_throw("poll error", std::exception() );
 
 		if (server.new_connexion() )
 		{
 			try
 			{
-				Client	new_client(server);
+				Client	new_client(server);	// ! throw possible
 			}
 			catch(const std::exception &e)
 			{
@@ -42,13 +39,13 @@ void	client_accept(Server &server)
 			}
 		}
 
-		clients_poll_struct_check(server);
+		check_clients_poll_struct(server);
 		if (siginit_status)
 			break ;
 	}
 }
 
-static void	clients_poll_struct_check(Server &server)
+static void	check_clients_poll_struct(Server &server)
 {
 	std::vector<Client> :: iterator	it = server.clients.begin();
 
@@ -76,8 +73,8 @@ static void	clients_poll_struct_check(Server &server)
 			size_t	to_send =  it->response.str_response.size();
 			ssize_t	sended;
 			
-			std::cout << "[" << COLOR_BOLD << "RESPONSE" << COLOR_RESET << "]\n" << it->response.str_response << std::endl;
-			std::cout << "[" << COLOR_BOLD << "END OF RESPONSE" << COLOR_RESET << "]" << std::endl;
+			std::cout << "[" << COLOR_BOLD_GREEN << "RESPONSE" << COLOR_RESET << "]\n" << it->response.str_response << std::endl;
+			std::cout << "[" << COLOR_BOLD_RED << "END OF RESPONSE" << COLOR_RESET << "]\n" << std::endl;
 			sended = send(it->communication_fd , it->response.str_response.c_str() , to_send, 0);
 			if (sended < static_cast<ssize_t>(to_send) )
 			{
@@ -102,7 +99,6 @@ static void	data_received(std::vector<Client> :: iterator &it, ssize_t ret)
 	}
 	catch (const StatusCode &e)
 	{
-		std::cout << COLOR_BOLD_RED << "catch: Client::request.parsing()" << COLOR_RESET << std::endl;
 		it->response.clear();
 		it->response.build_error(it->request, e.status_code);		// ! throw possible
 		it->request.clear();
@@ -116,7 +112,6 @@ static void	data_received(std::vector<Client> :: iterator &it, ssize_t ret)
 		}
 		catch (const StatusCode &e)
 		{
-			std::cout << COLOR_BOLD_RED << "catch: Client::response.build()" << COLOR_RESET << std::endl;
 			it->response.clear();
 			it->response.build_error(it->request, e.status_code);	// ! throw possible
 			it->request.clear();

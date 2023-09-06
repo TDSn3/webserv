@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 08:58:53 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/24 16:42:55 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/06 12:10:40 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 /*   car l'objet n'a pas été entièrement construit.							  */
 /*                                                                            */
 /* ************************************************************************** */
-Server::Server(const int desired_port) : port(desired_port)
+Server::Server(const int desired_port) : port(desired_port)	// ! throw possible	// TODO: gérer plusieurs ports
 {
 	_creat_socket();								// Crée un socket pour ce connecter au serveur	// ! throw possible
 	_assign_socket_name();							// Affecte un "nom" au socket crée				// ! throw possible
@@ -29,18 +29,18 @@ Server::Server(const int desired_port) : port(desired_port)
 	if (listen(_connexion_fd, 3) < 0)				// Prépare le socket pour la connexion
 	{
 		this->~Server();
-		perror("listen");
-		throw (std::exception() );
+		my_perror_and_throw("listen error", std::exception() );
 	}
 
 	if (fcntl(_connexion_fd, F_SETFL, O_NONBLOCK) )	// unique utilisation autorisé par le sujet
 	{
 		this->~Server();
-		perror("fcntl");
-		throw (std::exception() );
+		my_perror_and_throw("fcntl error", std::exception() );
 	}
 
 	add_fd_poll_struct(_connexion_fd, POLLIN);		// ajoute le socket à la struct de poll
+
+	std::cout << "\nThe server starts on port " << COLOR_BOLD_BLUE << port << COLOR_RESET << std::endl;
 }
 
 /*   COPY CONSTRUCTEUR   **************************************************** */

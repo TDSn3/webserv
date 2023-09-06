@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 08:58:53 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/31 10:51:03 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/06 12:17:26 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ Client::Client(void)
 	index_vector_poll_struct = 0;
 }
 
-Client::Client(Server &server)
+Client::Client(Server &server)	// ! throw possible
 {
 	buffer_clear();
 	memset( (char *) &address, 0, sizeof(address) );
@@ -33,14 +33,14 @@ Client::Client(Server &server)
 
 	communication_fd = accept(server.give_connexion_fd(), (struct sockaddr *) &address, &address_len);
 
-	if (communication_fd != 1)				// si une nouvelle connexion est arrivée et donc qu'il y a un client a créer
+	if (communication_fd != 1)				// si une nouvelle connexion est arrivée et donc qu'il y a un client à créer
 	{
 		set_non_blocking_fd();				// ! throw possible
 		ipv4 = ip_to_string();
 		port = address.sin_port;
 		server.add_fd_poll_struct(communication_fd, (POLLIN | POLLOUT) );
 		index_vector_poll_struct =  server.poll_struct.size();
-		if (index_vector_poll_struct > 1)	// [0] doit toujours être déjà attribué
+		if (index_vector_poll_struct > 1)	// [0] doit toujours être déjà attribué	// TODO: à modifier pour gérer plusieurs sockets
 			index_vector_poll_struct--;
 		else
 		{
@@ -85,9 +85,7 @@ int			Client::set_non_blocking_fd(void)
 	if (fcntl(communication_fd, F_SETFL, O_NONBLOCK) )	// unique utilisation autorisé par le sujet
 	{
 		close(communication_fd);
-		perror("fcntl");
-		throw (std::exception() );
-		return (1);
+		my_perror_and_throw("fcntl", std::exception() );
 	}
 	return (0);
 }
@@ -103,7 +101,7 @@ std::string	Client::ip_to_string(void)
 	return (ss.str() );
 }
 
-void	Client::buffer_clear(void)
+void		Client::buffer_clear(void)
 {
 	memset(buffer, 0, sizeof(buffer) );
 }

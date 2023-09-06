@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 13:55:10 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/05 16:25:17 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/06 12:32:30 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ class HttpRequest
 			request_status = false;
 		};
 
-		int									parsing(void);	// TODO: ! throw possible // !!! a gérer plus tard !!!
+		int									parsing(void);	// ! throw possible
 
 
 
@@ -124,7 +124,7 @@ class HttpRequest
 		void								_fill_up_to_lf(void);
 		void								_parse_request_line(void);
 		void								_parse_header(void);
-		void								_parsing_url(void);	// ! throw possible
+		void								_parse_url(void);	// ! throw possible
 		void								_print_parsing_url();
 		void								_check_url_syntax(void);
 

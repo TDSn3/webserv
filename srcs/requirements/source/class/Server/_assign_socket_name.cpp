@@ -30,7 +30,6 @@ void	Server::_assign_socket_name(void)
 	if (bind(_connexion_fd, (struct sockaddr *) &_address, sizeof(_address) ) < 0) 
 	{
 		this->~Server();
-		perror("bind failed");
-		throw (std::exception() );
+		my_perror_and_throw("bind failed", std::exception() );
 	}
 }

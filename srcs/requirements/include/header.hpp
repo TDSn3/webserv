@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:58:36 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/06 10:48:14 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/06 11:57:10 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@
 extern volatile sig_atomic_t	siginit_status;
 
 bool	check_arg(const int argc, const char * const *argv);
+void	my_perror_and_throw(const char *str, const std::exception &e);
 void	handler(int sig);
 void	client_accept(Server &server);
 rule	get_character_type(const char c);

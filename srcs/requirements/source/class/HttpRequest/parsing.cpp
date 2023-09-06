@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/25 11:10:13 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/05 20:54:14 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/06 12:30:54 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 //static void print_rule(const std::string &stock_line);
 static void unfolding(std::string &data);
 static void delete_first_crlf(std::string &data);
-static http_method get_http_method(const std::string str);
 
 int	HttpRequest::parsing(void)				// ! throw possible
 {		
@@ -39,129 +38,6 @@ int	HttpRequest::parsing(void)				// ! throw possible
 int	HttpRequest::_lexer(void)				// TODO: code lexer
 {
 	return (0);
-}
-
-void		HttpRequest::_fill_up_to_lf(void)
-{
-	for(size_t i = 0; data[i] && request_status == false ; i++)
-	{
-		if (!request_line.status)
-		{
-			str_request_line += data[i];
-			if (get_character_type(data[i]) == LF)
-				request_line.status = true;
-		}
-		else if(!header_status)
-		{
-			if ( (get_character_type(data[i]) == CR
-				&& data[i + 1] && get_character_type(data[i + 2]) == LF && !data[i + 3] ) || (get_character_type(data[i]) == LF && !data[i + 1] ) )	// no header
-			{
-				request_status = true;
-			}
-
-			str_header += data[i];
-			
-			if (get_character_type(data[i]) == LF
-				&& data[i + 1] && get_character_type(data[i + 1]) == CR
-				&& data[i + 2] && get_character_type(data[i + 2]) == LF)
-			{
-				i += 2;
-				header_status = true;
-				request_status = true;		// TODO: deplacer cette ligne apres verification du body
-			}
-		}
-		else
-		{
-			str_body += data[i];
-		}
-	}
-}
-
-void		HttpRequest::_parse_request_line(void)
-{
-	std::string			stock_line;
-	std::istringstream	ss(str_request_line);
-	char				i;
-
-	i = 0;
-	while(std::getline(ss, stock_line, ' ') && i < 127)
-	{
-		if (i == 0)
-			request_line.method = get_http_method(stock_line);
-		else if (i == 1)
-		{
-			request_line.uri = stock_line;
-		}
-		else if (i == 2)
-		{
-			while (!stock_line.empty() && get_character_type(stock_line[stock_line.size() - 1] ) & LWS)
-				stock_line.erase(stock_line.size() - 1);
-			request_line.version = stock_line;
-		}
-		i++;
-	}
-
-	try
-	{
-		_parsing_url();				// ! throw possible
-	}
-	catch(const std::exception &e)
-	{
-		throw (StatusCode(400) );
-	}
-	_check_url_syntax();			// ! throw possible
-	_print_parsing_url();
-
-	if (i != 3)
-		throw (StatusCode(400) );
-}
-
-void		HttpRequest::_parse_header(void)
-{
-	std::string			stock_line;
-	std::istringstream	ss(str_header);
-	size_t				i;
-	char				j;
-
-	while(std::getline(ss, stock_line) )
-	{
-		std::string			field_name;		// nom de champ		// <nom de champ>: <valeur de champ>	//  <nom de champ> ':' *LWS <valeur de champ>
-		std::string			field_value;	// valeur de champ	//
-
-		i = 0;
-		j = 0;
-		while(stock_line[i])
-		{		
-			if (stock_line[i] == ':' && j == 0)
-			{
-				i++;
-				while (stock_line[i] && get_character_type(stock_line[i] ) & LWS)
-					i++;
-				j++;
-				continue ;
-			}
-			if (j == 0)
-				field_name += stock_line[i];
-			else if (j == 1)
-				field_value += stock_line[i];
-			i++;
-		}
-		while (!field_value.empty() && get_character_type(field_value[field_value.size() - 1] ) & LWS)
-			field_value.erase(field_value.size() - 1);
-		if (!field_name.empty() )
-			header[field_name] += field_value;
-	}
-}
-
-static http_method	get_http_method(const std::string str)
-{
-	if (str == "EMPTY")
-		return EMPTY;
-	if (str == "GET")
-		return GET;
-	if (str == "POST")
-		return POST;
-	return EMPTY;
 }
 
 //static void	print_character_type(const unsigned char c)
