@@ -6,13 +6,13 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 09:52:55 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/07 09:14:18 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/07 09:59:52 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <header.hpp>
 
-static std::string	give_uri_extension_name(std::string uri);
+static std::string	give_uri_path_extension_name(std::string uri);
 
 void	HttpResponse::_make_response(HttpRequest &request, char **env)	// ! throw possible
 {
@@ -51,7 +51,7 @@ void	HttpResponse::_give_content_type(HttpRequest &request)
 			std::string	extension_name;
 			
 			str_response += "Content-Type: ";
-			extension_name = give_uri_extension_name(request.request_line.uri);
+			extension_name = give_uri_path_extension_name(request.request_line.parsed_url.path);
 			if (extension_name == "html" || extension_name == "css")
 				str_response += "text/" + extension_name;
 			else if (extension_name == "javascript" || extension_name == "js")
@@ -62,27 +62,27 @@ void	HttpResponse::_give_content_type(HttpRequest &request)
 	}
 }
 
-static std::string	give_uri_extension_name(std::string uri)
+static std::string	give_uri_path_extension_name(std::string uri)
 {
-    size_t		dot_pos;
+	size_t		dot_pos;
 	std::string	extension_name;
 
 	dot_pos = uri.rfind('.');
-    if (dot_pos == std::string::npos)
-	{
-        return ("");
-	}
+	if (dot_pos == std::string::npos)
+		return ("");
+
 	extension_name = uri.substr(dot_pos + 1);
 	if (extension_name == "cgi")
 		extension_name = "html";
 
 	if (extension_name != "html"
-		|| extension_name != "css"
-		|| extension_name != "javascript"
-		|| extension_name != "js"
-		|| extension_name != "ico"
-		|| extension_name != "png"
-		|| extension_name != "cgi")
+		&& extension_name != "css"
+		&& extension_name != "javascript"
+		&& extension_name != "js"
+		&& extension_name != "ico"
+		&& extension_name != "png"
+		&& extension_name != "cgi")
 		return ("");
-    return (extension_name);
+
+	return (extension_name);
 }
