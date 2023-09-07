@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 15:43:46 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/06 16:24:15 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/07 12:41:50 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ class HttpResponse
 			status_line.code = 200;
 			status_line.reason_phrase = "OK";
 
-			_make_response(request, env);		// ! throw possible
+			_make_response(request, env);				// ! throw possible
 		};
 
 		void	build_error(HttpRequest &request, const int status_code)

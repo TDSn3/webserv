@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 13:55:10 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/06 12:32:30 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/07 13:56:24 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,12 @@ class HttpRequest
 			request_line.status = false;
 			request_line.method = EMPTY;
 			request_line.uri.clear();
+			request_line.parsed_url.scheme.clear();
+			request_line.parsed_url.domain.clear();
+			request_line.parsed_url.port.clear();
+			request_line.parsed_url.path.clear();
+			request_line.parsed_url.query_parameters.clear();
+			request_line.parsed_url.fragment.clear();
 			request_line.version.clear();
 			request_line.major_version = 0;
 			request_line.minor_version = 0;

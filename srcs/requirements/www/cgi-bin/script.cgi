@@ -1,8 +1,8 @@
 #! /usr/bin/env python3
 
-import cgi
-import cgitb
+import sys
 
-cgitb.enable()
+print("Script CGI en Python :")
 
-print("Test d'un script CGI en Python.")
+for arg in sys.argv:
+	print(arg)

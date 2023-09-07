@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/11 15:58:36 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/07 09:12:44 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/07 12:06:27 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,8 @@ bool	check_arg(const int argc, const char * const *argv);
 void	my_perror_and_throw(const char *str, const std::exception &e);
 void	my_perror_and_throw(const char *str, const StatusCode &e);
 void	handler(int sig);
-void	client_accept(Server &server, char **env);
+void	infinity_loop_poll(Server &server, char **env);
+void	check_clients_poll_struct(Server &server, char **env);
 ssize_t	give_index_fd_in_poll_struct(std::vector<pollfd> &poll_struct, int fd);
 rule	get_character_type(const char c);
 

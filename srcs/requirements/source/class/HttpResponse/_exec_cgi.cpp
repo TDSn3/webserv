@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 15:19:36 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/06 17:35:56 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/07 13:38:25 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,8 @@ static void	new_char_for_execve(HttpRequest &request, std::vector<char *> &arg_f
 		it != request.request_line.parsed_url.query_parameters.end();
 		it++)
 	{
-		str = new char[it->second.size() + 1];
-		std::strcpy(str, it->second.c_str() );
+		str = new char[it->first.size() + it->second.size() + 1];
+		std::strcpy(str, (it->first + it->second).c_str() );
 		arg_for_execve.push_back(str);
 	}
 	arg_for_execve.push_back(NULL);
