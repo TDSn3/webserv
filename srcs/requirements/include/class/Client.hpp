@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 08:57:10 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/08/31 10:38:31 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/07 09:23:35 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ class Client
 		socklen_t						address_len;
 		std::string						ipv4;
 		in_port_t						port;
-		size_t							index_vector_poll_struct;
 		char							buffer[BUFFER_CLIENT_SIZE];
 		HttpRequest						request;
 		HttpResponse					response;

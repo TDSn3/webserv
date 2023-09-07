@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/02 14:22:45 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/06 16:10:03 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/07 09:22:17 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,20 @@ void	client_accept(Server &server, char **env)	// ! throw possible
 static void	check_clients_poll_struct(Server &server, char **env)
 {
 	std::vector<Client> :: iterator	it = server.clients.begin();
+	ssize_t							index_check;
+	size_t							index;
 
 	while (it != server.clients.end() )
 	{
-		if (server.poll_struct[ it->index_vector_poll_struct ].revents & (POLLIN | POLLERR | POLLHUP) )
+		index_check = give_index_fd_in_poll_struct(server.poll_struct, it->communication_fd);
+		if (index_check == -1)
+		{
+			std::cout << COLOR_BOLD_MAGENTA << "STRANGE !" << COLOR_RESET << std::endl;	// TODO: à supprimer à la fin
+			continue ;
+		}
+		index = static_cast<size_t>(index_check);
+
+		if (server.poll_struct[ index ].revents & (POLLIN | POLLERR | POLLHUP) )
 		{
 			it->buffer_clear();
 			
@@ -63,12 +73,12 @@ static void	check_clients_poll_struct(Server &server, char **env)
 			else								// la connexion a été fermée par le client
 			{
 				std::cout << COLOR_RED << "Déconnexion de [" << it->ipv4 << ":" << it->port << "]" << COLOR_RESET << "\n" << std::endl;
-				server.poll_struct.erase( server.poll_struct.begin() + static_cast<long>(it->index_vector_poll_struct) );
+				server.poll_struct.erase( server.poll_struct.begin() + static_cast<long>( index ) );
 				it = server.clients.erase(it);	// supprime le Client de std::vector stockée dans Server
 				continue ;
 			}
 		}
-		if (server.poll_struct[ it->index_vector_poll_struct ].revents & POLLOUT && it->response.status() == true)
+		if (server.poll_struct[ index ].revents & POLLOUT && it->response.status() == true)
 		{
 			size_t	to_send =  it->response.str_response.size();
 			ssize_t	sended;

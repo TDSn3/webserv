@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 08:58:53 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/06 12:17:26 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/07 09:23:32 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ Client::Client(void)
 	buffer_clear();
 	memset( (char *) &address, 0, sizeof(address) );
 	address_len = sizeof(address);
-	index_vector_poll_struct = 0;
 }
 
 Client::Client(Server &server)	// ! throw possible
@@ -39,15 +38,6 @@ Client::Client(Server &server)	// ! throw possible
 		ipv4 = ip_to_string();
 		port = address.sin_port;
 		server.add_fd_poll_struct(communication_fd, (POLLIN | POLLOUT) );
-		index_vector_poll_struct =  server.poll_struct.size();
-		if (index_vector_poll_struct > 1)	// [0] doit toujours être déjà attribué	// TODO: à modifier pour gérer plusieurs sockets
-			index_vector_poll_struct--;
-		else
-		{
-			close(communication_fd);
-			perror("poll_struct size");
-			throw (std::exception() );
-		}
 		server.clients.push_back(*this);
 
 		std::cout << "Connexion de " << COLOR_BOLD << ipv4 << COLOR_BLUE << ":" << port << COLOR_RESET << "\n" << std::endl;

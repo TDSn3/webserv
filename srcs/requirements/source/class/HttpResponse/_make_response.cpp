@@ -6,7 +6,7 @@
 /*   By: tda-silv <tda-silv@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 09:52:55 by tda-silv          #+#    #+#             */
-/*   Updated: 2023/09/06 17:45:41 by tda-silv         ###   ########.fr       */
+/*   Updated: 2023/09/07 09:14:18 by tda-silv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static std::string	give_uri_extension_name(std::string uri)
 	}
 	extension_name = uri.substr(dot_pos + 1);
 	if (extension_name == "cgi")
-		extension_name == "html";
+		extension_name = "html";
 
 	if (extension_name != "html"
 		|| extension_name != "css"
